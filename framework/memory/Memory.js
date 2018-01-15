@@ -9,7 +9,7 @@ const MemoryPatterns = require("./MemoryPatterns");
 /**
  * @implements IMemory
  */
-class Memory implements IMemory {
+class Memory extends IMemory {
 
     /**
      * Set value by key

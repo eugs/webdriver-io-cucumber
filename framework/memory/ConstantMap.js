@@ -9,9 +9,10 @@ const IConstantMap = require("./IConstantMap");
 /**
  * @implements IConstantMap
  */
-class ConstantMap implements IConstantMap {
+class ConstantMap extends IConstantMap {
 
     constructor() {
+        super();
         this.constants = new Map();
     }
 
