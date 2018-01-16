@@ -1,2 +1,0 @@
-[17:58:09]  COMMAND	POST 	 "/wd/hub/session"
-[17:58:09]  DATA		{"desiredCapabilities":{"javascriptEnabled":true,"locationContextEnabled":true,"handlesAlerts":true,"rotatable":true,"browserName":"firefox","loggingPrefs":{"browser":"ALL","driver":"ALL"},"requestOrigins":{"url":"http://webdriver.io","version":"4.10.0","name":"webdriverio"}}}

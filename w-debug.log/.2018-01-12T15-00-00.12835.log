@@ -1,7 +1,0 @@
-[18:00:00]  COMMAND	POST 	 "/wd/hub/session"
-[18:00:00]  DATA		{"desiredCapabilities":{"javascriptEnabled":true,"locationContextEnabled":true,"handlesAlerts":true,"rotatable":true,"browserName":"firefox","loggingPrefs":{"browser":"ALL","driver":"ALL"},"requestOrigins":{"url":"http://webdriver.io","version":"4.10.0","name":"webdriverio"}}}
-[18:00:07]  INFO	SET SESSION ID b14221b7-e79c-434b-b32b-0e060369d6a4
-[18:00:07]  RESULT		{"moz:profile":"/tmp/rust_mozprofile.M1QvhTAiU30s","rotatable":false,"timeouts":{"implicit":0,"pageLoad":300000,"script":30000},"pageLoadStrategy":"normal","moz:headless":false,"moz:accessibilityChecks":false,"acceptInsecureCerts":false,"browserVersion":"57.0.4","platformVersion":"4.13.0-26-generic","moz:processID":12891,"browserName":"firefox","platformName":"linux","moz:webdriverClick":false}
-[18:00:07]  COMMAND	DELETE 	 "/wd/hub/session/b14221b7-e79c-434b-b32b-0e060369d6a4"
-[18:00:07]  DATA		{}
-[18:00:07]  RESULT		{}
