@@ -1,25 +1,16 @@
 const {defineSupportCode} = require('cucumber');
 const expect = require('chai').expect;
+const state = require('../pop/index');
 
 defineSupportCode(({Given, When, Then, And, setDefaultTimeout})=>{
     setDefaultTimeout(60*1000);
     Given(/^I am on "(.*)" page$/,(page)=>{
-        if (page === 'Home'){
-            browser.url('https://www.npmjs.com/');
-        }
-        if (page === 'Features'){
-            browser.url('https://www.npmjs.com/features');
-        }
+        browser.url(browser.options.baseUrl+state.setPage(page).pageUrl);
     });
     When(/^I click on "(.*)" button$/,(button)=>{
-        if (button === 'Features'){
-            browser.click('#nav-features-link');
-        }
+        state.getElement(button).click();
     });
     Then(/^I should be on "(.*)" page$/,(page)=>{
-        if (page === 'Features'){
-            let url = browser.getUrl();
-            expect(url).to.eql('https://www.npmjs.com/features');
-        }
+        expect(browser.getUrl()).to.eql(browser.options.baseUrl+state.getPage().pageUrl);
     });
-})
+});
