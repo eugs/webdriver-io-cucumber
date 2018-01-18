@@ -8,9 +8,12 @@ defineSupportCode(({Given, When, Then, And, setDefaultTimeout})=>{
         browser.url(browser.options.baseUrl+state.setPage(page).pageUrl);
     });
     When(/^I click on "(.*)" button$/,(button)=>{
-        state.getElement(button).click();
+        state.getPage().getElement(button).click();
     });
     Then(/^I should be on "(.*)" page$/,(page)=>{
         expect(browser.getUrl()).to.eql(browser.options.baseUrl+state.getPage().pageUrl);
+    });
+    Then(/^I wait "(.*)" second\(s\)$/,(time)=>{
+        browser.pause(time*1000);
     });
 });
