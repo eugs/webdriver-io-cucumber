@@ -5,7 +5,7 @@
  * @type AbstractComponent
  */
 class AbstractComponent {
-    constructor(locator){
+    constructor(locator) {
         this.locator = locator;
         this.components = new Map();
     }
@@ -14,32 +14,27 @@ class AbstractComponent {
      * Define Element on component or page
      * @param name - element name
      * @param selector - element locator
-     * @param component -
      */
-    defineElement(name, selector, component){
-        if (this.components.has(component)){
-            this.components.get(component).set(name, selector);
-        }else{
-            this.components.set(name,selector);
-        }
+    defineElement(name, selector) {
+        this.components.set(name, selector);
     }
 
-    defineCollection(name, selector, component){
-        if (this.components.has(component)){
-            this.components.get(component).set(name, selector);
-        }else{
-            this.components.set(name,selector);
-        }
+    /**
+     * Define collection
+     * @param name
+     * @param selector
+     */
+    defineCollection(name, selector) {
+        this.components.set(name, selector);
     }
 
-    defineComponent(name, selector, component){
-        if (this.components.has(component)){
-            this.components.get(component).set(name, selector);
-        }else{
-            this.components.set(name,selector);
-        }
-
-        // component?this.components.get(component).set(name, selector):this.components.set(name,selector);
+    /**
+     * Define component
+     * @param name
+     * @param selector
+     */
+    defineComponent(name, selector) {
+        this.components.set(name, selector);
     }
 
 }
