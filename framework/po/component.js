@@ -1,9 +1,9 @@
-const AbstractComponent = require("./abstractComponent");
+const AbstractComponent = require("./AbstractComponent");
 
-class Component extends AbstractComponent{
-    constructor(name, locator){
+class Component extends AbstractComponent {
+    constructor(name, locator) {
         super(locator);
-        this.components.set(name,locator);
+        this.components.set(name, locator);
     }
 }
 
