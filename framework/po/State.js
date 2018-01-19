@@ -1,37 +1,51 @@
-class StateManager {
+class State {
+
     constructor() {
         this.pages = new Map();
-        this.activePage = null;
     }
 
+    /**
+     * Add page
+     * @param name
+     * @param obj
+     */
     addPage(name, obj) {
         this.pages.set(name, obj);
     }
 
-    setPage(name) {
-        this.activePage = this.pages.get(name);
+    /**
+     * Get page by name
+     * @param name
+     * @return {Page}
+     */
+    getPageByName(name) {
         return this.pages.get(name);
     }
 
+    /**
+     * Get page by URL
+     * @return {Page}
+     */
     getPage() {
         let url = browser.getUrl();
         let key = null;
         url = url.replace(browser.options.baseUrl, '');
+
         this.pages.forEach((v, k) => {
             if (url.includes(v.pageUrl)) {
                 key = k
             }
         });
+
         if (!key) {
-            throw Error(`Page ${url} is not defined!`);
+            throw new Error(`Page ${url} is not defined!`);
         }
-        this.activePage = this.pages.get(key);
+
         return this.pages.get(key);
     }
 
-    clear() {
-        this.pages.clear();
-    }
+    //TODO add pattern recognition (REGEXP)
+
 }
 
-module.exports = new StateManager();
+module.exports = new State();

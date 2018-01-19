@@ -81,8 +81,6 @@ class Memory extends IMemory {
         }
     }
 
-
-
 }
 
 module.exports = Memory;
