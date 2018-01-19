@@ -5,6 +5,7 @@
 
 # Project specyfic
 node_modules
-package-lock.json
 debug.log
 w-debug.log/
+errorShots/
+logs/
