@@ -9,3 +9,6 @@ debug.log
 w-debug.log/
 errorShots/
 logs/
+allure-report/
+reports/
+wdio.conf_example.js

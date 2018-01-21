@@ -1,5 +1,5 @@
 const path = require('path');
-const Collection = require(path.resolve('./framework/po/collection'));
+const Collection = require(path.resolve('./framework/po/Collection'));
 
 class Packages extends Collection {
     constructor(name = 'Packages',locator = '.marginalia-container a>img'){

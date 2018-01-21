@@ -1,5 +1,5 @@
 const path = require('path');
-const Components = require(path.resolve('./framework/po/component'));
+const Components = require(path.resolve('./framework/po/Component'));
 
 class Menu extends Components {
     constructor(name = 'Menu',locator = '.drop-down-menu-section.products-list'){

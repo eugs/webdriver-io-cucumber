@@ -5,6 +5,7 @@ const state = require('../pop/index');
 defineSupportCode(({Given, When, Then, And, setDefaultTimeout}) => {
     setDefaultTimeout(60 * 1000);
     Given(/^I am on "(.*)" page$/, (page) => {
+        console.log(browser.options);
         browser.url(browser.options.baseUrl + state.getPageByName(page).pageUrl);
     });
     When(/^I click on "(.*)" button$/, (button) => {
