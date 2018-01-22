@@ -12,3 +12,4 @@ logs/
 allure-report/
 reports/
 wdio.conf_example.js
+package-lock.json

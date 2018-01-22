@@ -36,11 +36,11 @@ module.exports = function (gulp) {
         if (args.tags) {
             tags = args.tags;
             tags.includes(',')
-                ? tags = tags.slice(',')
+                ? tags = tags.split(/\s*\,\s*/gm)
                 : tags = [tags];
         }
         capabilities.tags = tags;
-
+        
         return gulp.src(path.resolve('./wdio.conf.js'))
             .pipe(wdio({
                 baseUrl: baseUrl,
