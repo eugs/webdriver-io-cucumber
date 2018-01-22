@@ -2,8 +2,7 @@ const path = require('path');
 
 exports.config = {
     specs: [
-        path.resolve('./tests/e2e/features/*.feature'),
-        path.resolve('./tests/e2e/features/**/*.feature'),
+        path.resolve('./tests/e2e/features/**/*')
     ],
     services: ['selenium-standalone'],
     seleniumLogs: './logs',
