@@ -34,10 +34,7 @@ module.exports = function (gulp) {
         //args.user and args.password
 
         if (args.tags) {
-            tags = args.tags;
-            tags.includes(',')
-                ? tags = tags.split(/\s*\,\s*/gm)
-                : tags = [tags];
+            tags = args.tags.split(/\s*\,\s*/gm);
         }
         capabilities.tags = tags;
         
