@@ -10,6 +10,7 @@ class TaskKiller {
     static kill(itemToKill) {
         const CMD_LIST = "tasklist /V /FO CSV";
         const KILL = "taskkill /F /PID ";
+
         exec(CMD_LIST, (error, stdout, stderr) => {
             if (error) throw error;
 
@@ -22,7 +23,6 @@ class TaskKiller {
             const pids = filteredList.map((item) => {
                 return item.split(/,/)[1].replace(/"/g, "")
             });
-
 
             pids.forEach((pid) => {
                 exec(KILL + pid, (error, stdout, stderr) => {
