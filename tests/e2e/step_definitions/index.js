@@ -1,8 +1,8 @@
-const {defineSupportCode} = require('cucumber');
+const { defineSupportCode } = require('cucumber');
 const expect = require('chai').expect;
 const state = require('../pop/index');
 
-defineSupportCode(({Given, When, Then, And, setDefaultTimeout}) => {
+defineSupportCode(({ Given, When, Then, And, setDefaultTimeout }) => {
     setDefaultTimeout(60 * 1000);
     Given(/^I am on "(.*)" page$/, (page) => {
         browser.url(browser.options.baseUrl + state.getPageByName(page).pageUrl);

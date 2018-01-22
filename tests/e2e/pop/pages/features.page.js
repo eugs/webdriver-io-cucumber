@@ -1,5 +1,5 @@
 const path = require('path');
-const Page = require(path.resolve('./framework/po/page'));
+const Page = require(path.resolve('./framework/po/Page'));
 const Menu = require('../components/menu');
 
 class Home extends Page {
