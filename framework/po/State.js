@@ -29,11 +29,10 @@ class State {
     getPage() {
         let url = browser.getUrl();
         let key = null;
-        url = url.replace(browser.options.baseUrl, '');
-
         this.pages.forEach((v, k) => {
-            if (url.includes(v.pageUrl)) {
-                key = k
+            let re = new RegExp(v.pageUrl);
+            if (url.search(re) != -1) {
+                key = k;
             }
         });
 
@@ -43,9 +42,6 @@ class State {
 
         return this.pages.get(key);
     }
-
-    //TODO add pattern recognition (REGEXP)
-
 }
 
 module.exports = new State();

@@ -42,9 +42,9 @@ class Page extends AbstractComponent {
             let tempArray = name.split(' of ');
             let collectionName = tempArray[1];
             let orderNum = tempArray[0].substr(1);
-            return {name: collectionName, orderNum};
+            return { name: collectionName, orderNum };
         } else {
-            return {name};
+            return { name };
         }
     }
 
@@ -89,7 +89,18 @@ class Page extends AbstractComponent {
 
         return newChainLink
     }
-
+    /**
+     * Set new collection by selector or collection object
+     * @param {*} name - collection name
+     * @param {*} selector - can be selector of collection or collection object
+     */
+    defineCollection(name, selector) {
+        if (selector instanceof Collection) {
+            this.components.set(name, selector);
+        } else {
+            this.components.set(name, new Collection(name, selector));
+        }
+    }
 
 }
 
