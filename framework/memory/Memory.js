@@ -31,6 +31,8 @@ class Memory extends IMemory {
             return this._getMemoryValue(key.match(MemoryPatterns.MEMORY))
         } else if (MemoryPatterns.CONSTANT.test(key)) {
             return this._getConstantValue(key.match(MemoryPatterns.CONSTANT))
+        } else if (MemoryPatterns.FILE_CONSTANT.test(key)) {
+            return this._getFileConstantValue(key.match(MemoryPatterns.FILE_CONSTANT))
         } else return key
     }
 
@@ -40,7 +42,7 @@ class Memory extends IMemory {
      * @param map {ConstantMap}
      */
     static setConstantMap(map) {
-        this.constants = new map().constants;
+        this.constantMap = new map();
     }
 
     /**
@@ -74,11 +76,17 @@ class Memory extends IMemory {
      * @return value by key
      */
     static _getConstantValue(key) {
-        if (this.constants.has(key)) {
-            return this.constants.get(key)
-        } else {
-            throw new Error(`Constant key ${key} does not exist`)
-        }
+        return this.constantMap.getConstant(key)
+    }
+
+    /**
+     * Get constant by key
+     * @private
+     * @param key
+     * @return value by key
+     */
+    static _getFileConstantValue(key) {
+        return this.constantMap.getFileConstant(key)
     }
 
 }

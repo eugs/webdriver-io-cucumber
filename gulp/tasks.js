@@ -1,10 +1,17 @@
-const path = require('path');
+const creds = require('../tests/configs/creds');
+const browsersConfig = require('../tests/configs/browserConfigs');
 const wdio = require('gulp-webdriver');
 const allure = require('allure-commandline');
+const path = require('path');
+const server = require("gulp-express");
 const config = path.resolve('./wdio.conf.js');
 
 module.exports = function (gulp, creds, browsersConfig) {
     const args = require('./help').args.help().argv;
+
+    gulp.task("c_server", () => {
+        server.run(["./framework/credential_server/server.js"]);
+    });
 
     gulp.task('test', test);
 

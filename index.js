@@ -1,7 +1,9 @@
-
-exports.State = require('./framework/po/State');
-exports.Collection = require('./framework/po/Collection');
-exports.Component = require('./framework/po/Component');
-exports.Page = require('./framework/po/Page');
-exports.AngularPage = require('./framework/po/AngularPage');
-exports.tasks = require('./gulp/tasks');
+const path = require('path');
+exports.State = require(path.resolve('./framework/po/State'));
+exports.Collection = require(path.resolve('./framework/po/Collection'));
+exports.Component = require(path.resolve('./framework/po/Component'));
+exports.Page = require(path.resolve('./framework/po/Page'));
+exports.CredentialManager = require(path.resolve('./framework/credential_manager/CredentialManager'));
+exports.TaskKiller = require(path.resolve('./framework/taskkiller/TaskKiller'));
+exports.Memory = require(path.resolve('./framework/memory/Memory'));
+exports.tasks = require(path.resolve('./gulp/tasks'));
