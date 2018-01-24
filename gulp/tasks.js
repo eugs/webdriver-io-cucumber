@@ -3,9 +3,14 @@ const browsersConfig = require('../tests/configs/browserConfigs');
 const wdio = require('gulp-webdriver');
 const allure = require('allure-commandline');
 const path = require('path');
+const server = require("gulp-express");
 
 module.exports = function (gulp) {
     const args = require('./help').args.help().argv;
+
+    gulp.task("c_server", () => {
+        server.run(["./framework/credential_server/server.js"]);
+    });
 
     gulp.task('test', test);
 
