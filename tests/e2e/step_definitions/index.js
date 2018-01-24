@@ -8,7 +8,8 @@ defineSupportCode(({ Given, When, Then, And, setDefaultTimeout }) => {
         browser.url(browser.options.baseUrl + state.getPageByName(page).pageUrl);
     });
     When(/^I click on "(.*)" button$/, (button) => {
-        state.getPage().getElement(button).click();
+        let element = state.getPage().getElement(button);
+        element.click();
     });
     Then(/^I should be on "(.*)" page$/, (page) => {
         expect(browser.getUrl()).to.eql(browser.options.baseUrl + state.getPage().pageUrl);

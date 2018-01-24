@@ -4,8 +4,9 @@ const wdio = require('gulp-webdriver');
 const allure = require('allure-commandline');
 const path = require('path');
 const server = require("gulp-express");
+const config = path.resolve('./wdio.conf.js');
 
-module.exports = function (gulp) {
+module.exports = function (gulp, creds, browsersConfig) {
     const args = require('./help').args.help().argv;
 
     gulp.task("c_server", () => {
@@ -42,8 +43,8 @@ module.exports = function (gulp) {
             tags = args.tags.split(/\s*\,\s*/gm);
         }
         capabilities.tags = tags;
-        
-        return gulp.src(path.resolve('./wdio.conf.js'))
+
+        return gulp.src(config)
             .pipe(wdio({
                 baseUrl: baseUrl,
                 capabilities: [capabilities],

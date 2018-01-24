@@ -42,9 +42,9 @@ class Page extends AbstractComponent {
             let tempArray = name.split(' of ');
             let collectionName = tempArray[1];
             let orderNum = tempArray[0].substr(1);
-            return {name: collectionName, orderNum};
+            return { name: collectionName, orderNum };
         } else {
-            return {name};
+            return { name };
         }
     }
 
@@ -72,9 +72,15 @@ class Page extends AbstractComponent {
             } else if (component instanceof Collection) {
                 newChainLink.component = component;
 
-                chainLink.element
-                    ? newChainLink.element = chainLink.element.$$(component.locator)[elementName.orderNum]
-                    : newChainLink.element = $$(component.locator)[elementName.orderNum];
+                if (elementName.orderNum) {
+                    chainLink.element
+                        ? newChainLink.element = chainLink.element.$$(component.locator)[elementName.orderNum]
+                        : newChainLink.element = $$(component.locator)[elementName.orderNum];
+                } else {
+                    chainLink.element
+                        ? newChainLink.element = chainLink.element.$$(component.locator)
+                        : newChainLink.element = $$(component.locator);
+                }
 
             } else if (typeof component === 'string') {
                 newChainLink.component = null;
@@ -89,7 +95,18 @@ class Page extends AbstractComponent {
 
         return newChainLink
     }
-
+    /**
+     * Set new collection by selector or collection object
+     * @param {*} name - collection name
+     * @param {*} selector - can be selector of collection or collection object
+     */
+    defineCollection(name, selector) {
+        if (selector instanceof Collection) {
+            this.components.set(name, selector);
+        } else {
+            this.components.set(name, new Collection(name, selector));
+        }
+    }
 
 }
 
