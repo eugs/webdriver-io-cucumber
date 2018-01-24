@@ -72,9 +72,15 @@ class Page extends AbstractComponent {
             } else if (component instanceof Collection) {
                 newChainLink.component = component;
 
-                chainLink.element
-                    ? newChainLink.element = chainLink.element.$$(component.locator)[elementName.orderNum]
-                    : newChainLink.element = $$(component.locator)[elementName.orderNum];
+                if (elementName.orderNum) {
+                    chainLink.element
+                        ? newChainLink.element = chainLink.element.$$(component.locator)[elementName.orderNum]
+                        : newChainLink.element = $$(component.locator)[elementName.orderNum];
+                } else {
+                    chainLink.element
+                        ? newChainLink.element = chainLink.element.$$(component.locator)
+                        : newChainLink.element = $$(component.locator);
+                }
 
             } else if (typeof component === 'string') {
                 newChainLink.component = null;
