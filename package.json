@@ -31,5 +31,8 @@
     "wdio-tap-reporter": "0.0.4",
     "webdriverio": "^4.10.0",
     "yargs": "^10.1.1"
+  },
+  "devDependencies": {
+    "gulp-express": "^0.3.5"
   }
 }
