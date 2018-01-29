@@ -28,11 +28,11 @@ class Memory extends IMemory {
      */
     static getValue(key) {
         if (MemoryPatterns.MEMORY.test(key)) {
-            return this._getMemoryValue(key.match(MemoryPatterns.MEMORY))
+            return this._getMemoryValue(key.substr(1))
         } else if (MemoryPatterns.CONSTANT.test(key)) {
-            return this._getConstantValue(key.match(MemoryPatterns.CONSTANT))
+            return this._getConstantValue(key.substr(1))
         } else if (MemoryPatterns.FILE_CONSTANT.test(key)) {
-            return this._getFileConstantValue(key.match(MemoryPatterns.FILE_CONSTANT))
+            return this._getFileConstantValue(key.substr(1))
         } else return key
     }
 
