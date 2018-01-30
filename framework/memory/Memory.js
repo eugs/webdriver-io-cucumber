@@ -30,9 +30,9 @@ class Memory extends IMemory {
         if (MemoryPatterns.MEMORY.test(key)) {
             return this._getMemoryValue(key.substr(1))
         } else if (MemoryPatterns.CONSTANT.test(key)) {
-            return this._getConstantValue(key.substr(1))
+            return this._getConstantValue(key.substr(2))
         } else if (MemoryPatterns.FILE_CONSTANT.test(key)) {
-            return this._getFileConstantValue(key.substr(1))
+            return this._getFileConstantValue(key.substr(3))
         } else return key
     }
 

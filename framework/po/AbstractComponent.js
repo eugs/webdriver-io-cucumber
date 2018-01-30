@@ -1,4 +1,5 @@
 "use strict";
+const Collection = require('./Collection');
 
 /**
  * @abstract
@@ -20,12 +21,16 @@ class AbstractComponent {
     }
 
     /**
-     * Define collection
-     * @param name
-     * @param selector
+     * Set new collection by selector or collection object
+     * @param {*} name - collection name
+     * @param {*} selector - can be selector of collection or collection object
      */
     defineCollection(name, selector) {
-        this.components.set(name, selector);
+        if (selector instanceof Collection) {
+            this.components.set(name, selector);
+        } else {
+            this.components.set(name, new Collection(name, selector));
+        }
     }
 
     /**
