@@ -1,4 +1,5 @@
 const AbstractComponent = require("./AbstractComponent");
+const Collection = require('./Collection');
 
 class Component extends AbstractComponent {
     constructor(name, locator) {
