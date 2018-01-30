@@ -27,7 +27,7 @@ module.exports = function (gulp, creds, browsersConfig) {
     function test() {
         let baseUrl = creds[args.env].url;
         let capabilities;
-        let cucumberOpts;
+        let cucumberOpts = {};
         let tags = [];
 
         args.browser
