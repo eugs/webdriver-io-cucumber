@@ -95,10 +95,11 @@ class Page extends AbstractComponent {
 
         return newChainLink
     }
+
     /**
      * Set new collection by selector or collection object
-     * @param {*} name - collection name
-     * @param {*} selector - can be selector of collection or collection object
+     * @param {String} name - collection name
+     * @param {String|Collection} selector - can be selector of collection or collection object
      */
     defineCollection(name, selector) {
         if (selector instanceof Collection) {

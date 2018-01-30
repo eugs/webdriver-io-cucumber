@@ -20,15 +20,6 @@ class AbstractComponent {
     }
 
     /**
-     * Define collection
-     * @param name
-     * @param selector
-     */
-    defineCollection(name, selector) {
-        this.components.set(name, selector);
-    }
-
-    /**
      * Define component
      * @param name
      * @param selector
