@@ -1,6 +1,6 @@
-Feature: Test 1
-
-  Scenario: First
+Feature: Test 2
+  @deb
+  Scenario: Second
     Given I am on "Home" page
     When I click on "Menu -> Feature" button
     Then I should be on "Features" page
