@@ -1,6 +1,7 @@
 const AbstractComponent = require("./AbstractComponent");
 const Component = require('./Component');
 const Collection = require('./Collection');
+const WAIT_FOR_ELEMENT = 60 * 1000;
 
 class Page extends AbstractComponent {
     constructor(locator, url = '/') {
@@ -48,6 +49,11 @@ class Page extends AbstractComponent {
         }
     }
 
+    _waitForElement(element) {
+        browser.waitUntil(() => { return element; }, WAIT_FOR_ELEMENT);
+        return element;
+    }
+
     /**
      *
      * @param name
@@ -66,28 +72,28 @@ class Page extends AbstractComponent {
                 newChainLink.component = component;
 
                 chainLink.element
-                    ? newChainLink.element = chainLink.element.$(component.locator)
-                    : newChainLink.element = $(component.locator);
+                    ? newChainLink.element = _waitForElement(chainLink.element.$(component.locator))
+                    : newChainLink.element = _waitForElement($(component.locator));
 
             } else if (component instanceof Collection) {
                 newChainLink.component = component;
 
                 if (elementName.orderNum) {
                     chainLink.element
-                        ? newChainLink.element = chainLink.element.$$(component.locator)[elementName.orderNum]
-                        : newChainLink.element = $$(component.locator)[elementName.orderNum];
+                        ? newChainLink.element = _waitForElement(chainLink.element.$$(component.locator)[elementName.orderNum])
+                        : newChainLink.element = _waitForElement($$(component.locator)[elementName.orderNum]);
                 } else {
                     chainLink.element
-                        ? newChainLink.element = chainLink.element.$$(component.locator)
-                        : newChainLink.element = $$(component.locator);
+                        ? newChainLink.element = _waitForElement(chainLink.element.$$(component.locator))
+                        : newChainLink.element = _waitForElement($$(component.locator));
                 }
 
             } else if (typeof component === 'string') {
                 newChainLink.component = null;
 
                 chainLink.element
-                    ? newChainLink.element = chainLink.element.$(component)
-                    : newChainLink.element = $(component);
+                    ? newChainLink.element = _waitForElement(chainLink.element.$(component))
+                    : newChainLink.element = _waitForElement($(component));
             }
         } else {
             throw new Error(`Element '${elementName.name}' isn't defined on the page!`);
