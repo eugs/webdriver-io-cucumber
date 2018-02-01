@@ -72,28 +72,28 @@ class Page extends AbstractComponent {
                 newChainLink.component = component;
 
                 chainLink.element
-                    ? newChainLink.element = _waitForElement(chainLink.element.$(component.locator))
-                    : newChainLink.element = _waitForElement($(component.locator));
+                    ? newChainLink.element = this._waitForElement(chainLink.element.$(component.locator))
+                    : newChainLink.element = this._waitForElement($(component.locator));
 
             } else if (component instanceof Collection) {
                 newChainLink.component = component;
 
                 if (elementName.orderNum) {
                     chainLink.element
-                        ? newChainLink.element = _waitForElement(chainLink.element.$$(component.locator)[elementName.orderNum])
-                        : newChainLink.element = _waitForElement($$(component.locator)[elementName.orderNum]);
+                        ? newChainLink.element = this._waitForElement(chainLink.element.$$(component.locator)[elementName.orderNum])
+                        : newChainLink.element = this._waitForElement($$(component.locator)[elementName.orderNum]);
                 } else {
                     chainLink.element
-                        ? newChainLink.element = _waitForElement(chainLink.element.$$(component.locator))
-                        : newChainLink.element = _waitForElement($$(component.locator));
+                        ? newChainLink.element = this._waitForElement(chainLink.element.$$(component.locator))
+                        : newChainLink.element = this._waitForElement($$(component.locator));
                 }
 
             } else if (typeof component === 'string') {
                 newChainLink.component = null;
 
                 chainLink.element
-                    ? newChainLink.element = _waitForElement(chainLink.element.$(component))
-                    : newChainLink.element = _waitForElement($(component));
+                    ? newChainLink.element = this._waitForElement(chainLink.element.$(component))
+                    : newChainLink.element = this._waitForElement($(component));
             }
         } else {
             throw new Error(`Element '${elementName.name}' isn't defined on the page!`);
