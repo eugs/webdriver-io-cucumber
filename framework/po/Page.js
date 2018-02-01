@@ -48,6 +48,12 @@ class Page extends AbstractComponent {
         }
     }
 
+    _waitForElement(elementName) {
+        browser.waitUntil(() => {
+            return state.getPage().getElement(elementName);
+        }, WAIT_FOR_ELEMENT);
+    }
+
     /**
      *
      * @param name
@@ -64,30 +70,43 @@ class Page extends AbstractComponent {
 
             if (component instanceof Component) {
                 newChainLink.component = component;
-
-                chainLink.element
-                    ? newChainLink.element = chainLink.element.$(component.locator)
-                    : newChainLink.element = $(component.locator);
-
+                if (chainLink.element) {
+                    _waitForElement(chainLink.element.$(component.locator));
+                    newChainLink.element = chainLink.element.$(component.locator);
+                } else {
+                    _waitForElement($(component.locator));
+                    newChainLink.element = $(component.locator);
+                }
             } else if (component instanceof Collection) {
                 newChainLink.component = component;
 
                 if (elementName.orderNum) {
-                    chainLink.element
-                        ? newChainLink.element = chainLink.element.$$(component.locator)[elementName.orderNum]
-                        : newChainLink.element = $$(component.locator)[elementName.orderNum];
+                    if (chainLink.element) {
+                        _waitForElement(chainLink.element.$$(component.locator)[elementName.orderNum]);
+                        newChainLink.element = chainLink.element.$$(component.locator)[elementName.orderNum]
+                    } else {
+                        _waitForElement($$(component.locator)[elementName.orderNum]);
+                        newChainLink.element = $$(component.locator)[elementName.orderNum];
+                    }
                 } else {
-                    chainLink.element
-                        ? newChainLink.element = chainLink.element.$$(component.locator)
-                        : newChainLink.element = $$(component.locator);
+                    if (chainLink.element) {
+                        _waitForElement(chainLink.element.$$(component.locator));
+                        newChainLink.element = chainLink.element.$$(component.locator);
+                    } else {
+                        _waitForElement($$(component.locator));
+                        newChainLink.element = $$(component.locator);
+                    }
                 }
 
             } else if (typeof component === 'string') {
                 newChainLink.component = null;
-
-                chainLink.element
-                    ? newChainLink.element = chainLink.element.$(component)
-                    : newChainLink.element = $(component);
+                if (chainLink.element) {
+                    _waitForElement(chainLink.element.$(component));
+                    newChainLink.element = chainLink.element.$(component);
+                } else {
+                    _waitForElement($(component));
+                    newChainLink.element = $(component);
+                }
             }
         } else {
             throw new Error(`Element '${elementName.name}' isn't defined on the page!`);
