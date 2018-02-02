@@ -7,4 +7,5 @@ exports.AngularPage = require('./framework/po/AngularPage');
 exports.CredentialManager = require('./framework/credential_manager/CredentialManager');
 exports.TaskKiller = require('./framework/taskkiller/TaskKiller');
 exports.Memory = require('./framework/memory/Memory');
+exports.ConstantMap = require('./framework/memory/ConstantMap');
 exports.tasks = require('./gulp/tasks');
