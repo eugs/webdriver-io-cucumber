@@ -10,11 +10,11 @@ const CredentialServer = require("../framework/credential_server/CredentialServe
 module.exports = function (gulp, creds, browsersConfig, server = new CredentialServer()) {
     const args = require('./help').args.help().argv;
 
-    gulp.task("c_server", () => {
+    gulp.task('c_server', () => {
         server.start(3099);
     });
 
-    gulp.task('test', test);
+    gulp.task('test', ['c_server'], test);
 
     gulp.task('report', (done) => {
         let browserName = args.browser ? args.browser : 'chrome';
