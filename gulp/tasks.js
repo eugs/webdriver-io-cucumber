@@ -1,10 +1,10 @@
-const creds = require('../tests/configs/creds');
-const browsersConfig = require('../tests/configs/browserConfigs');
-const wdio = require('gulp-webdriver');
-const allure = require('allure-commandline');
-const path = require('path');
-const server = require("gulp-express");
-const config = path.resolve('./wdio.conf.js');
+const creds = require('../tests/configs/creds'),
+    browsersConfig = require('../tests/configs/browserConfigs'),
+    wdio = require('gulp-webdriver'),
+    allure = require('allure-commandline'),
+    path = require('path'),
+    server = require("gulp-express"),
+    config = path.resolve('./wdio.conf.js');
 
 module.exports = function (gulp, creds, browsersConfig) {
     const args = require('./help').args.help().argv;
@@ -25,20 +25,26 @@ module.exports = function (gulp, creds, browsersConfig) {
     });
 
     function test() {
-        let baseUrl = creds[args.env].url;
-        let capabilities;
-        let cucumberOpts = {};
-        let tags = [];
+        let baseUrl = args.url
+            ? args.url
+            : creds[args.env].url,
+            cucumberOpts = {},
+            tags = [],
+            user,
+            password,
+            capabilities = args.browser
+                ? browsersConfig[args.browser]
+                : browsersConfig.chrome;
 
-        args.browser
-            ? capabilities = browsersConfig[args.browser]
-            : capabilities = browsersConfig.chrome;
+        if (args.user && args.password) {
+            user = args.user;
+            password = args.password;
+        } else if (args.user) {
+            throw new Error('Password is required with user argument!');
+        }
 
         process.env.ENV = args.env;
         process.env.BROWSER = capabilities.browserName;
-        // TODO
-        //user and password in memory
-        //args.user and args.password
 
         if (args.tags) {
             tags = args.tags.split(/\s*\,\s*/gm);
@@ -50,7 +56,9 @@ module.exports = function (gulp, creds, browsersConfig) {
                 baseUrl: baseUrl,
                 capabilities: [capabilities],
                 desiredCapabilities: capabilities,
-                cucumberOpts: cucumberOpts
+                cucumberOpts: cucumberOpts,
+                user: user,
+                password: password
             }));
     }
 };
