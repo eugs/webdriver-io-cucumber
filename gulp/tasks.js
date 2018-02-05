@@ -3,17 +3,18 @@ const creds = require('../tests/configs/creds'),
     wdio = require('gulp-webdriver'),
     allure = require('allure-commandline'),
     path = require('path'),
-    server = require("gulp-express"),
-    config = path.resolve('./wdio.conf.js');
+    config = path.resolve('./wdio.conf.js'),
+    CredentialServer = require("../framework/credential_server/CredentialServer");
 
-module.exports = function (gulp, creds, browsersConfig) {
+
+module.exports = function (gulp, creds, browsersConfig, server = new CredentialServer()) {
     const args = require('./help').args.help().argv;
 
-    gulp.task("c_server", () => {
-        server.run(["./framework/credential_server/server.js"]);
+    gulp.task('c_server', () => {
+        server.start(3099);
     });
 
-    gulp.task('test', test);
+    gulp.task('test', ['c_server'], test);
 
     gulp.task('report', (done) => {
         let browserName = args.browser ? args.browser : 'chrome';
@@ -59,6 +60,16 @@ module.exports = function (gulp, creds, browsersConfig) {
                 cucumberOpts: cucumberOpts,
                 user: user,
                 password: password
-            }));
+            }))
+            .on("end", function () {
+                console.log("E2E Testing complete");
+                server.stop();
+                process.exit();
+            })
+            .on("error", function (error) {
+                console.log("E2E Tests failed");
+                server.stop();
+                process.exit(1);
+            });
     }
 };
