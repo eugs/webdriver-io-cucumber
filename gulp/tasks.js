@@ -21,6 +21,10 @@ module.exports = function (gulp, creds, browsersConfig, server = new CredentialS
         server.stop();
     });
 
+    gulp.task('kill', () => {
+        server.stop();
+    });
+
     gulp.task('report', (done) => {
         let browserName = args.browser ? args.browser : 'chrome';
         const generation = allure(['generate', path.resolve('./reports/' + args.env + '/' + browserName + '/allure'), '--clean']);
