@@ -8,4 +8,5 @@ exports.CredentialManager = require('./framework/credential_manager/CredentialMa
 exports.TaskKiller = require('./framework/taskkiller/TaskKiller');
 exports.Memory = require('./framework/memory/Memory');
 exports.ConstantMap = require('./framework/memory/ConstantMap');
+exports.CredentialServer = require('./framework/credential_server/CredentialServer');
 exports.tasks = require('./gulp/tasks');

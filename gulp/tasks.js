@@ -5,12 +5,13 @@ const allure = require('allure-commandline');
 const path = require('path');
 const server = require("gulp-express");
 const config = path.resolve('./wdio.conf.js');
+const CredentialServer = require("../framework/credential_server/CredentialServer");
 
-module.exports = function (gulp, creds, browsersConfig) {
+module.exports = function (gulp, creds, browsersConfig, server = new CredentialServer()) {
     const args = require('./help').args.help().argv;
 
     gulp.task("c_server", () => {
-        server.run(["./framework/credential_server/server.js"]);
+        server.start(3099);
     });
 
     gulp.task('test', test);
