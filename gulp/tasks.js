@@ -7,6 +7,7 @@ const server = require("gulp-express");
 const config = path.resolve('./wdio.conf.js');
 const CredentialServer = require("../framework/credential_server/CredentialServer");
 
+
 module.exports = function (gulp, creds, browsersConfig, server = new CredentialServer()) {
     const args = require('./help').args.help().argv;
 
@@ -52,6 +53,9 @@ module.exports = function (gulp, creds, browsersConfig, server = new CredentialS
                 capabilities: [capabilities],
                 desiredCapabilities: capabilities,
                 cucumberOpts: cucumberOpts
-            }));
+            }))
+            .pipe(() => {
+                server.stop();
+            });
     }
 };

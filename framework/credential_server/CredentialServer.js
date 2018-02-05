@@ -41,7 +41,11 @@ class CredentialServer {
     }
 
     start(port) {
-        this.server.listen(port);
+        this.runningInstance = this.server.listen(port);
+    }
+
+    stop() {
+        this.runningInstance.close();
     }
 
 }
