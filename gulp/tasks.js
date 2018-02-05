@@ -15,7 +15,11 @@ module.exports = function (gulp, creds, browsersConfig, server = new CredentialS
         server.start(3099);
     });
 
-    gulp.task('test', ['c_server'], test);
+    gulp.task('run_test', ['c_server'], test);
+
+    gulp.task('test', ['run_test'], () => {
+        server.stop();
+    });
 
     gulp.task('report', (done) => {
         let browserName = args.browser ? args.browser : 'chrome';
@@ -54,8 +58,5 @@ module.exports = function (gulp, creds, browsersConfig, server = new CredentialS
                 desiredCapabilities: capabilities,
                 cucumberOpts: cucumberOpts
             }))
-            .pipe(() => {
-                server.stop();
-            });
     }
 };
