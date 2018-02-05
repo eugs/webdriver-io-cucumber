@@ -15,15 +15,7 @@ module.exports = function (gulp, creds, browsersConfig, server = new CredentialS
         server.start(3099);
     });
 
-    gulp.task('run_test', ['c_server'], test);
-
-    gulp.task('test', ['run_test'], () => {
-        server.stop();
-    });
-
-    gulp.task('kill', () => {
-        server.stop();
-    });
+    gulp.task('test', ['c_server'], test);
 
     gulp.task('report', (done) => {
         let browserName = args.browser ? args.browser : 'chrome';
@@ -62,5 +54,15 @@ module.exports = function (gulp, creds, browsersConfig, server = new CredentialS
                 desiredCapabilities: capabilities,
                 cucumberOpts: cucumberOpts
             }))
+            .on("end", function() {
+                console.log("E2E Testing complete");
+                server.stop();
+                process.exit();
+            })
+            .on("error", function(error) {
+                console.log("E2E Tests failed");
+                server.stop();
+                process.exit(1);
+            });
     }
 };
