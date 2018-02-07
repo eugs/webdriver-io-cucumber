@@ -19,7 +19,6 @@ class ServerCredentialManager extends CredentialManager {
             body: creds,
             json: true
         }).catch(e => {
-            //console.log(e);
             throw new Error("Credential pool has not been created")
         })
     }
@@ -34,7 +33,6 @@ class ServerCredentialManager extends CredentialManager {
         }).then((body) => {
             return JSON.parse(body)
         }).catch(e => {
-            //console.log(e);
             throw new Error("Cannot get credentials")
         })
     }
@@ -43,19 +41,20 @@ class ServerCredentialManager extends CredentialManager {
      * Free credentials
      */
     static freeCredentials() {
-        return this.credentials.then(credentials => {
-            return request({
-                method: "PUT",
-                uri: "http://localhost:3099/credentials",
-                body: {
-                    username: credentials.username
-                },
-                json: true
+        if (this.credentials) {
+            return this.credentials.then(credentials => {
+                return request({
+                    method: "PUT",
+                    uri: "http://localhost:3099/credentials",
+                    body: {
+                        username: credentials.username
+                    },
+                    json: true
+                })
+            }).catch(e => {
+                throw new Error("Cannot free credentials")
             })
-        }).catch(e => {
-            //console.log(e);
-            throw new Error("Cannot free credentials")
-        })
+        }
     }
 
 
