@@ -23,8 +23,8 @@ module.exports.args = require('yargs')
         alias: 't',
         describe: 'Run scenarios with specified tags. If needs more than 1 tag, it should be separated by commas'
     })
-    .option('parallel', {
-        alias: 'r',
-        describe: 'Run scenarios in parallel with specified number of browser instances. For default: 2'
+    .option('instances', {
+        alias: 'i',
+        describe: 'Run scenarios in parallel with specified number of browser instances. For default: 1'
     })
     .demandOption(['env'], 'Please provide "env" argument to run tests');
