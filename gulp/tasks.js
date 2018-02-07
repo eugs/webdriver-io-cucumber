@@ -33,6 +33,7 @@ module.exports = function (gulp, creds, browsersConfig, server = new CredentialS
             tags = [],
             user,
             password,
+            instances,
             capabilities = args.browser
                 ? browsersConfig[args.browser]
                 : browsersConfig.chrome;
@@ -44,6 +45,7 @@ module.exports = function (gulp, creds, browsersConfig, server = new CredentialS
             throw new Error('Password is required with user argument!');
         }
 
+        instances = args.instances ? args.instances : 1;
         process.env.ENV = args.env;
         process.env.BROWSER = capabilities.browserName;
 
@@ -58,6 +60,7 @@ module.exports = function (gulp, creds, browsersConfig, server = new CredentialS
                 capabilities: [capabilities],
                 desiredCapabilities: capabilities,
                 cucumberOpts: cucumberOpts,
+                maxInstances: instances,
                 user: user,
                 password: password
             }))
