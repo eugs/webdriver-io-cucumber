@@ -15,7 +15,7 @@ exports.config = {
     waitforTimeout: 60000,
     connectionRetryTimeout: 90000,
     connectionRetryCount: 1,
-    framework: 'cucumber',
+    framework: 'cucumber2fix',
     reporters: ['junit', 'dot', 'allure', 'json', 'spec'],
     reporterOptions: {
         junit: {
