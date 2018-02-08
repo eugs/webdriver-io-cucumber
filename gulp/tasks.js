@@ -1,19 +1,20 @@
-const creds = require('../tests/configs/creds');
-const browsersConfig = require('../tests/configs/browserConfigs');
-const wdio = require('gulp-webdriver');
-const allure = require('allure-commandline');
-const path = require('path');
-const server = require("gulp-express");
-const config = path.resolve('./wdio.conf.js');
+const creds = require('../tests/configs/creds'),
+    browsersConfig = require('../tests/configs/browserConfigs'),
+    wdio = require('gulp-webdriver'),
+    allure = require('allure-commandline'),
+    path = require('path'),
+    config = path.resolve('./wdio.conf.js'),
+    CredentialServer = require("../framework/credential_server/CredentialServer");
 
-module.exports = function (gulp, creds, browsersConfig) {
+
+module.exports = function (gulp, creds, browsersConfig, server = new CredentialServer()) {
     const args = require('./help').args.help().argv;
 
-    gulp.task("c_server", () => {
-        server.run(["./framework/credential_server/server.js"]);
+    gulp.task('c_server', () => {
+        server.start(3099);
     });
 
-    gulp.task('test', test);
+    gulp.task('test', ['c_server'], test);
 
     gulp.task('report', (done) => {
         let browserName = args.browser ? args.browser : 'chrome';
@@ -25,20 +26,28 @@ module.exports = function (gulp, creds, browsersConfig) {
     });
 
     function test() {
-        let baseUrl = creds[args.env].url;
-        let capabilities;
-        let cucumberOpts = {};
-        let tags = [];
+        let baseUrl = args.url
+            ? args.url
+            : creds[args.env].url,
+            cucumberOpts = {},
+            tags = [],
+            user,
+            password,
+            instances,
+            capabilities = args.browser
+                ? browsersConfig[args.browser]
+                : browsersConfig.chrome;
 
-        args.browser
-            ? capabilities = browsersConfig[args.browser]
-            : capabilities = browsersConfig.chrome;
+        if (args.user && args.password) {
+            user = args.user;
+            password = args.password;
+        } else if (args.user) {
+            throw new Error('Password is required with user argument!');
+        }
 
+        instances = args.instances ? args.instances : 1;
         process.env.ENV = args.env;
         process.env.BROWSER = capabilities.browserName;
-        // TODO
-        //user and password in memory
-        //args.user and args.password
 
         if (args.tags) {
             tags = args.tags.split(/\s*\,\s*/gm);
@@ -50,7 +59,20 @@ module.exports = function (gulp, creds, browsersConfig) {
                 baseUrl: baseUrl,
                 capabilities: [capabilities],
                 desiredCapabilities: capabilities,
-                cucumberOpts: cucumberOpts
-            }));
+                cucumberOpts: cucumberOpts,
+                maxInstances: instances,
+                user: user,
+                password: password
+            }))
+            .on("end", function () {
+                console.log("E2E Testing complete");
+                server.stop();
+                process.exit();
+            })
+            .on("error", function (error) {
+                console.log("E2E Tests failed");
+                server.stop();
+                process.exit(1);
+            });
     }
 };

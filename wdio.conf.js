@@ -11,7 +11,6 @@ exports.config = {
     coloredLogs: true,
     deprecationWarnings: false,
     bail: 0,
-    maxInstances: 1,
     waitforTimeout: 60000,
     connectionRetryTimeout: 90000,
     connectionRetryCount: 1,
