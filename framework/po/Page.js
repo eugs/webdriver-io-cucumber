@@ -17,21 +17,34 @@ class Page extends AbstractComponent {
         /**
          * @type {{component: Page, element: null}}
          */
-        const chainLink = {
+        console.log('HERE!!!!');
+        let chainLink = {
             component: this,
-            element: null
+            locator: ''
         };
 
-        const tokens = elementPath.split(' -> ').reverse();
-
+        let tokens = elementPath.split(' -> ').reverse();
+        console.log(tokens);
         let currentChainLink = chainLink;
-
+        console.log(tokens.length);
+        
         while (tokens.length > 0) {
+            console.log(tokens.length);
             currentChainLink = this._elementDependsOnType(tokens.pop(), currentChainLink);
+            console.log('here2');
+
         }
+        console.log(currentChainLink);
+        console.log('!!!!!!!!!!!!!!!!!!!!!!!!');
 
-        return currentChainLink.element;
-
+        if (currentChainLink.isCollection) {
+            // browser.waitUntil(() => browser.elements(currentChainLink.locator), WAIT_FOR_ELEMENT);
+            return browser.elements(currentChainLink.locator);
+        } else {
+            //browser.waitUntil(() => browser.element(currentChainLink.locator), WAIT_FOR_ELEMENT);
+            console.log(browser.element(currentChainLink.locator));
+            return browser.element(currentChainLink.locator);
+        }
     }
 
     /**
@@ -49,9 +62,34 @@ class Page extends AbstractComponent {
         }
     }
 
-    _waitForElement(element) {
-        browser.waitUntil(() => { return element; }, WAIT_FOR_ELEMENT);
-        return element;
+    _waitForElement(elementLocator, parent) {
+        if (parent) {
+            browser.waitUntil(() => parent.$(elementLocator), WAIT_FOR_ELEMENT);
+            return parent.$(elementLocator);
+        } else {
+            browser.waitUntil(() => $(elementLocator), WAIT_FOR_ELEMENT);
+            return $(elementLocator);
+        }
+    }
+
+    _waitForCollection(elementLocator, parent) {
+        if (parent) {
+            browser.waitUntil(() => parent.$$(elementLocator), WAIT_FOR_ELEMENT);
+            return parent.$$(elementLocator);
+        } else {
+            browser.waitUntil(() => $$(elementLocator), WAIT_FOR_ELEMENT);
+            return $$(elementLocator);
+        }
+    }
+
+    _waitForElementOfCollection(elementLocator, orderNum, parent) {
+        if (parent) {
+            browser.waitUntil(() => parent.$$(elementLocator)[orderNum], WAIT_FOR_ELEMENT);
+            return parent.$$(elementLocator)[orderNum];
+        } else {
+            browser.waitUntil(() => $$(elementLocator)[orderNum], WAIT_FOR_ELEMENT);
+            return $$(elementLocator)[orderNum];
+        }
     }
 
     /**
@@ -63,43 +101,55 @@ class Page extends AbstractComponent {
      */
     _elementDependsOnType(name, chainLink) {
         const elementName = this._isArray(name);
-        const newChainLink = {};
-
+        let newChainLink = {};
+        newChainLink.isCollection = false;
+        console.log('2222222222222222222222');
+        // console.log(chainLink);
         if (chainLink.component.components.has(elementName.name)) {
             const component = chainLink.component.components.get(elementName.name);
+            console.log('+++++');
+            // console.log(component);
 
             if (component instanceof Component) {
+                console.log('11111111111111111');
                 newChainLink.component = component;
-
-                chainLink.element
-                    ? newChainLink.element = this._waitForElement(chainLink.element.$(component.locator))
-                    : newChainLink.element = this._waitForElement($(component.locator));
+                chainLink.locator
+                    ? newChainLink.locator = chainLink.locator + ' ' + component.locator
+                    : newChainLink.locator = component.locator;
+                console.log(newChainLink.locator);
+                // chainLink.element
+                //     ? newChainLink.element = this._waitForElement(component.locator, chainLink.element)
+                //     : newChainLink.element = this._waitForElement(component.locator);
 
             } else if (component instanceof Collection) {
                 newChainLink.component = component;
 
                 if (elementName.orderNum) {
-                    chainLink.element
-                        ? newChainLink.element = this._waitForElement(chainLink.element.$$(component.locator)[elementName.orderNum])
-                        : newChainLink.element = this._waitForElement($$(component.locator)[elementName.orderNum]);
+                    chainLink.locator
+                        ? newChainLink.locator = chainLink.locator + ' ' + component.locator + ':nth-child(' + [elementName.orderNum] + ')'
+                        : newChainLink.locator = component.locator + ':nth-child(' + [elementName.orderNum] + ')';
                 } else {
-                    chainLink.element
-                        ? newChainLink.element = this._waitForElement(chainLink.element.$$(component.locator))
-                        : newChainLink.element = this._waitForElement($$(component.locator));
+                    chainLink.locator
+                        ? newChainLink.locator = chainLink.locator + ' ' + component.locator
+                        : newChainLink.locator = component.locator;
+                    newChainLink.isCollection = true;
                 }
 
             } else if (typeof component === 'string') {
                 newChainLink.component = null;
-
-                chainLink.element
-                    ? newChainLink.element = this._waitForElement(chainLink.element.$(component))
-                    : newChainLink.element = this._waitForElement($(component));
+                console.log('here');
+                //console.log(chainLink.locator);
+                chainLink.locator
+                    ? newChainLink.locator = chainLink.locator + ' ' + component
+                    : newChainLink.locator = component;
+                console.log(newChainLink.locator);
             }
+            
         } else {
             throw new Error(`Element '${elementName.name}' isn't defined on the page!`);
         }
+        return newChainLink;
 
-        return newChainLink
     }
 
     /**
