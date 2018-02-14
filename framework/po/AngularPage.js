@@ -24,28 +24,12 @@ class AngularPage extends Page {
     }
 
     /**
- * Returns webdriverio element by the element name from the page object
- * @param {String} elementPath - element name or full path to element
- */
+     * Returns webdriverio element by the element name from the page object
+     * @param {String} elementPath - element name or full path to element
+     */
     getElement(elementPath) {
-        /**
-         * @type {{component: Page, element: null}}
-         */
-        const chainLink = {
-            component: this,
-            element: null
-        };
-
-        const tokens = elementPath.split(' -> ').reverse();
-
-        let currentChainLink = chainLink;
-
-        while (tokens.length > 0) {
-            this.waitAngular();
-            currentChainLink = this._elementDependsOnType(tokens.pop(), currentChainLink);
-        }
-        return currentChainLink.element;
-
+        this.waitAngular();
+        return super.getElement(elementPath);
     }
 }
 module.exports = AngularPage;

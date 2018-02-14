@@ -17,33 +17,20 @@ class Page extends AbstractComponent {
         /**
          * @type {{component: Page, element: null}}
          */
-        console.log('HERE!!!!');
-        let chainLink = {
+        const chainLink = {
             component: this,
-            locator: ''
+            locator: '',
+            isCollection: false
         };
 
-        let tokens = elementPath.split(' -> ').reverse();
-        console.log(tokens);
-        let currentChainLink = chainLink;
-        console.log(tokens.length);
-        
-        while (tokens.length > 0) {
-            console.log(tokens.length);
-            currentChainLink = this._elementDependsOnType(tokens.pop(), currentChainLink);
-            console.log('here2');
+        const tokens = elementPath.split(' -> ').reverse();
+        const initValue = this._elementDependsOnType(tokens.pop(), chainLink);
+        const resultChainLink = tokens.reduce((currentChainLink, token) => this._elementDependsOnType(token, currentChainLink), initValue);
 
-        }
-        console.log(currentChainLink);
-        console.log('!!!!!!!!!!!!!!!!!!!!!!!!');
-
-        if (currentChainLink.isCollection) {
-            // browser.waitUntil(() => browser.elements(currentChainLink.locator), WAIT_FOR_ELEMENT);
-            return browser.elements(currentChainLink.locator);
+        if (resultChainLink.isCollection) {
+            return browser.elements(resultChainLink.locator).value;
         } else {
-            //browser.waitUntil(() => browser.element(currentChainLink.locator), WAIT_FOR_ELEMENT);
-            console.log(browser.element(currentChainLink.locator));
-            return browser.element(currentChainLink.locator);
+            return browser.element(resultChainLink.locator);
         }
     }
 
@@ -62,35 +49,6 @@ class Page extends AbstractComponent {
         }
     }
 
-    _waitForElement(elementLocator, parent) {
-        if (parent) {
-            browser.waitUntil(() => parent.$(elementLocator), WAIT_FOR_ELEMENT);
-            return parent.$(elementLocator);
-        } else {
-            browser.waitUntil(() => $(elementLocator), WAIT_FOR_ELEMENT);
-            return $(elementLocator);
-        }
-    }
-
-    _waitForCollection(elementLocator, parent) {
-        if (parent) {
-            browser.waitUntil(() => parent.$$(elementLocator), WAIT_FOR_ELEMENT);
-            return parent.$$(elementLocator);
-        } else {
-            browser.waitUntil(() => $$(elementLocator), WAIT_FOR_ELEMENT);
-            return $$(elementLocator);
-        }
-    }
-
-    _waitForElementOfCollection(elementLocator, orderNum, parent) {
-        if (parent) {
-            browser.waitUntil(() => parent.$$(elementLocator)[orderNum], WAIT_FOR_ELEMENT);
-            return parent.$$(elementLocator)[orderNum];
-        } else {
-            browser.waitUntil(() => $$(elementLocator)[orderNum], WAIT_FOR_ELEMENT);
-            return $$(elementLocator)[orderNum];
-        }
-    }
 
     /**
      *
@@ -101,54 +59,42 @@ class Page extends AbstractComponent {
      */
     _elementDependsOnType(name, chainLink) {
         const elementName = this._isArray(name);
-        let newChainLink = {};
+        const newChainLink = {};
+
         newChainLink.isCollection = false;
-        console.log('2222222222222222222222');
-        // console.log(chainLink);
+
         if (chainLink.component.components.has(elementName.name)) {
             const component = chainLink.component.components.get(elementName.name);
-            console.log('+++++');
-            // console.log(component);
 
             if (component instanceof Component) {
-                console.log('11111111111111111');
                 newChainLink.component = component;
-                chainLink.locator
-                    ? newChainLink.locator = chainLink.locator + ' ' + component.locator
-                    : newChainLink.locator = component.locator;
-                console.log(newChainLink.locator);
-                // chainLink.element
-                //     ? newChainLink.element = this._waitForElement(component.locator, chainLink.element)
-                //     : newChainLink.element = this._waitForElement(component.locator);
-
+                newChainLink.locator = constructLocator(component.locator, chainLink.locator);
             } else if (component instanceof Collection) {
                 newChainLink.component = component;
 
                 if (elementName.orderNum) {
-                    chainLink.locator
-                        ? newChainLink.locator = chainLink.locator + ' ' + component.locator + ':nth-child(' + [elementName.orderNum] + ')'
-                        : newChainLink.locator = component.locator + ':nth-child(' + [elementName.orderNum] + ')';
+                    newChainLink.locator = constructLocator(`${component.locator}:nth-child(${elementName.orderNum})`, chainLink.locator);
                 } else {
-                    chainLink.locator
-                        ? newChainLink.locator = chainLink.locator + ' ' + component.locator
-                        : newChainLink.locator = component.locator;
+                    newChainLink.locator = constructLocator(component.locator, chainLink.locator);
                     newChainLink.isCollection = true;
                 }
 
             } else if (typeof component === 'string') {
                 newChainLink.component = null;
-                console.log('here');
-                //console.log(chainLink.locator);
-                chainLink.locator
-                    ? newChainLink.locator = chainLink.locator + ' ' + component
-                    : newChainLink.locator = component;
-                console.log(newChainLink.locator);
+                newChainLink.locator = constructLocator(component, chainLink.locator);
             }
-            
+
         } else {
             throw new Error(`Element '${elementName.name}' isn't defined on the page!`);
         }
+
         return newChainLink;
+
+        function constructLocator(childLocator, parentLocator) {
+            return parentLocator
+                ? newChainLink.locator = parentLocator + ' ' + childLocator
+                : newChainLink.locator = childLocator;
+        }
 
     }
 
