@@ -23,8 +23,8 @@ class Page extends AbstractComponent {
             isCollection: false
         };
 
-        const tokens = elementPath.split(' -> ').reverse();
-        const initValue = this._elementDependsOnType(tokens.pop(), chainLink);
+        const tokens = elementPath.split(/\s*->\s*/);
+        const initValue = this._elementDependsOnType(tokens.shift(), chainLink);
         const resultChainLink = tokens.reduce((currentChainLink, token) => this._elementDependsOnType(token, currentChainLink), initValue);
 
         if (resultChainLink.isCollection) {
@@ -40,7 +40,7 @@ class Page extends AbstractComponent {
      */
     _isArray(name) {
         if (name.includes('#')) {
-            let tempArray = name.split(' of ');
+            let tempArray = name.split(/\s*of\s*/);
             let collectionName = tempArray[1];
             let orderNum = tempArray[0].substr(1);
             return { name: collectionName, orderNum };
