@@ -61,7 +61,7 @@ class Page extends AbstractComponent {
         const elementName = this._isArray(name);
         const newChainLink = {};
 
-        newChainLink.isCollection = false;
+        newChainLink.isCollection = chainLink.isCollection;
 
         if (chainLink.component.components.has(elementName.name)) {
             const component = chainLink.component.components.get(elementName.name);
