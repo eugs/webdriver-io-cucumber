@@ -15,7 +15,7 @@ exports.config = {
     connectionRetryTimeout: 90000,
     connectionRetryCount: 1,
     framework: 'cucumber2fix',
-    reporters: ['junit', 'dot', 'allure', 'json', 'spec'],
+    reporters: ['junit', 'dot', 'allure', 'json', 'spec', 'cucumber-json'],
     reporterOptions: {
         junit: {
             outputDir: './reports/' + process.env.ENV + '/' + process.env.BROWSER + '/xml'
