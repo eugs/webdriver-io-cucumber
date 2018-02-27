@@ -3,7 +3,7 @@ const Component = require('./Component');
 const Collection = require('./Collection');
 const WAIT_FOR_ELEMENT = 60 * 1000;
 
-class PageOld extends AbstractComponent {
+class Page extends AbstractComponent {
     constructor(locator, url = '/') {
         super(locator);
         this.pageUrl = url;
@@ -117,4 +117,4 @@ class PageOld extends AbstractComponent {
 
 }
 
-module.exports = PageOld;
+module.exports = Page;
