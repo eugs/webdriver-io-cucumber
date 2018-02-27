@@ -19,19 +19,19 @@ class Page extends AbstractComponent {
          */
         const chainLink = {
             component: this,
-            locator: '',
-            isCollection: false
+            element: null
         };
 
-        const tokens = elementPath.split(/\s*->\s*/);
-        const initValue = this._elementDependsOnType(tokens.shift(), chainLink);
-        const resultChainLink = tokens.reduce((currentChainLink, token) => this._elementDependsOnType(token, currentChainLink), initValue);
+        const tokens = elementPath.split(' -> ').reverse();
 
-        if (resultChainLink.isCollection) {
-            return browser.elements(resultChainLink.locator).value;
-        } else {
-            return browser.element(resultChainLink.locator);
+        let currentChainLink = chainLink;
+
+        while (tokens.length > 0) {
+            currentChainLink = this._elementDependsOnType(tokens.pop(), currentChainLink);
         }
+
+        return currentChainLink.element;
+
     }
 
     /**
@@ -40,15 +40,19 @@ class Page extends AbstractComponent {
      */
     _isArray(name) {
         if (name.includes('#')) {
-            let tempArray = name.split(/\s*of\s*/);
+            let tempArray = name.split(' of ');
             let collectionName = tempArray[1];
-            let orderNum = tempArray[0].substr(1);
+            let orderNum = parseInt(tempArray[0].substr(1)) - 1;
             return { name: collectionName, orderNum };
         } else {
             return { name };
         }
     }
 
+    _waitForElement(element) {
+        browser.waitUntil(() => { return element; }, WAIT_FOR_ELEMENT);
+        return element;
+    }
 
     /**
      *
@@ -61,41 +65,41 @@ class Page extends AbstractComponent {
         const elementName = this._isArray(name);
         const newChainLink = {};
 
-        newChainLink.isCollection = chainLink.isCollection;
-
         if (chainLink.component.components.has(elementName.name)) {
             const component = chainLink.component.components.get(elementName.name);
 
             if (component instanceof Component) {
                 newChainLink.component = component;
-                newChainLink.locator = constructLocator(component.locator, chainLink.locator);
+
+                chainLink.element
+                    ? newChainLink.element = this._waitForElement(chainLink.element.$(component.locator))
+                    : newChainLink.element = this._waitForElement($(component.locator));
+
             } else if (component instanceof Collection) {
                 newChainLink.component = component;
 
-                if (elementName.orderNum) {
-                    newChainLink.locator = constructLocator(`${component.locator}:nth-child(${elementName.orderNum})`, chainLink.locator);
+                if (elementName.orderNum !== undefined) {
+                    chainLink.element
+                        ? newChainLink.element = this._waitForElement(chainLink.element.$$(component.locator)[elementName.orderNum])
+                        : newChainLink.element = this._waitForElement($$(component.locator)[elementName.orderNum]);
                 } else {
-                    newChainLink.locator = constructLocator(component.locator, chainLink.locator);
-                    newChainLink.isCollection = true;
+                    chainLink.element
+                        ? newChainLink.element = this._waitForElement(chainLink.element.$$(component.locator))
+                        : newChainLink.element = this._waitForElement($$(component.locator));
                 }
 
             } else if (typeof component === 'string') {
                 newChainLink.component = null;
-                newChainLink.locator = constructLocator(component, chainLink.locator);
-            }
 
+                chainLink.element
+                    ? newChainLink.element = this._waitForElement(chainLink.element.$(component))
+                    : newChainLink.element = this._waitForElement($(component));
+            }
         } else {
             throw new Error(`Element '${elementName.name}' isn't defined on the page!`);
         }
 
-        return newChainLink;
-
-        function constructLocator(childLocator, parentLocator) {
-            return parentLocator
-                ? newChainLink.locator = parentLocator + ' ' + childLocator
-                : newChainLink.locator = childLocator;
-        }
-
+        return newChainLink
     }
 
     /**
