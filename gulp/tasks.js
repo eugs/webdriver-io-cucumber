@@ -7,7 +7,7 @@ const creds = require('../tests/configs/creds'),
     CredentialServer = require("../framework/credential_server/CredentialServer");
 
 
-module.exports = function (gulp, creds, browsersConfig, server = new CredentialServer()) {
+module.exports = function (gulp, creds, browsersConfig, pathToCustomTestsInfo, server = new CredentialServer()) {
     const args = require('./help').args.help().argv;
 
     gulp.task('c_server', () => {
@@ -16,13 +16,40 @@ module.exports = function (gulp, creds, browsersConfig, server = new CredentialS
 
     gulp.task('test', ['c_server'], test);
 
-    gulp.task('report', (done) => {
+    gulp.task('report', () => {
+        const report = require('multiple-cucumber-html-reporter');
+        const os = require('os');
+        let platform = os.platform() === 'win32' ? 'windows' : os.platform();
+        const customData = require(path.resolve(pathToCustomTestsInfo));
         let browserName = args.browser ? args.browser : 'chrome';
-        const generation = allure(['generate', path.resolve('./reports/' + args.env + '/' + browserName + '/allure'), '--clean']);
-        generation.on('exit', (exitCode) => {
-            console.log('Generation is finished with code:', exitCode);
-            done();
-        })
+        let date = new Date();
+        let reportDate = date.getHours() + '.' + date.getMinutes() + 'time_' + date.getDate() + '_' + parseInt(date.getMonth() + 1) + '_' + date.getFullYear() + '_date';
+        let jsonPath = customData.jsonPath ? customData.jsonPath : path.resolve('./reports/' + args.env + '/' + browserName + '/json');
+        let reportPath = customData.reportPath ? customData.reportPath : path.resolve('./reports/' + args.env + '/' + browserName + '/html/' + reportDate);
+        report.generate({
+            jsonDir: jsonPath,
+            reportPath: reportPath,
+            metadata: {
+                browser: {
+                    name: browserName,
+                    version: customData.browserVersion
+                },
+                device: customData.device,
+                platform: {
+                    name: platform,
+                    version: os.release()
+                }
+            },
+            customData: {
+                title: 'Run info',
+                data: [
+                    { label: 'Project', value: customData.project },
+                    { label: 'Release', value: customData.release },
+                    { label: 'Execution Start Time', value: customData.startTime },
+                    { label: 'Execution End Time', value: customData.endTime }
+                ]
+            }
+        });
     });
 
     function test() {
