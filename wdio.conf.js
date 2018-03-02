@@ -15,15 +15,15 @@ exports.config = {
     connectionRetryTimeout: 90000,
     connectionRetryCount: 1,
     framework: 'cucumber2fix',
-    reporters: ['junit', 'dot', 'allure', 'json', 'spec', 'cucumber-json'],
+    reporters: ['junit', 'dot', 'json', 'cucumber', 'cucumber-json'],
     reporterOptions: {
         junit: {
             outputDir: './reports/' + process.env.ENV + '/' + process.env.BROWSER + '/xml'
         },
-        allure: {
-            outputDir: './reports/' + process.env.ENV + '/' + process.env.BROWSER + '/allure'
-        },
         json: {
+            outputDir: './reports/' + process.env.ENV + '/' + process.env.BROWSER + '/wdio-json'
+        },
+        'cucumber-json': {
             outputDir: './reports/' + process.env.ENV + '/' + process.env.BROWSER + '/json'
         }
     },
