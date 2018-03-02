@@ -1,7 +1,6 @@
 const creds = require('../tests/configs/creds'),
     browsersConfig = require('../tests/configs/browserConfigs'),
     wdio = require('gulp-webdriver'),
-    allure = require('allure-commandline'),
     path = require('path'),
     config = path.resolve('./wdio.conf.js'),
     CredentialServer = require("../framework/credential_server/CredentialServer");
