@@ -1,6 +1,6 @@
 {
   "name": "wd-cucumber",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "Framework wrapper on webdriver.io + cucumber",
   "main": "index.js",
   "scripts": {
@@ -22,12 +22,10 @@
     "gulp": "^3.9.1",
     "gulp-webdriver": "^2.0.3",
     "request": "^2.83.0",
-    "request-promise": "^4.2.2",
+    "request-promise-native": "^1.0.5",
     "wdio-cucumber-json-reporter": "^0.0.3",
     "wdio-cucumber2fix-framework": "^0.0.2",
     "wdio-cucumber-reporter": "0.0.2",
-    "wdio-json-reporter": "^0.3.1",
-    "wdio-junit-reporter": "^0.3.1",
     "wdio-selenium-standalone-service": "0.0.9",
     "webdriverio": "^4.10.0",
     "multiple-cucumber-html-reporter": "^1.5.0",

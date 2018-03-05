@@ -27,11 +27,8 @@ module.exports = function (gulp, creds, browsersConfig, pathToCustomTestsInfo, s
         customData.jsonPath = jsonPath;
         customData.reportPath = reportPath;
 
-        let html = new HTMLReporter(customData);
-        html.generate();
-
-        let junit = new JunitReporter();
-        junit.generateXMLReport(jsonPath, xmlPath);
+        new HTMLReporter(customData).generate();
+        new JunitReporter().generateXMLReport(jsonPath, xmlPath);
     });
 
     function test() {

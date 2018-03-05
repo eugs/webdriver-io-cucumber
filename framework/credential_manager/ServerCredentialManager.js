@@ -1,6 +1,6 @@
 "use strict";
 
-const request = require("request-promise");
+const request = require("request-promise-native");
 const CredentialManager = require("./CredentialManager");
 
 /**
