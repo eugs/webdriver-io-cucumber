@@ -5,7 +5,6 @@ const creds = require('../tests/configs/creds'),
     config = path.resolve('./wdio.conf.js'),
     CredentialServer = require("../framework/credential_server/CredentialServer");
 
-
 module.exports = function (gulp, creds, browsersConfig, pathToCustomTestsInfo, server = new CredentialServer()) {
     const args = require('./help').args.help().argv;
 
@@ -81,7 +80,7 @@ module.exports = function (gulp, creds, browsersConfig, pathToCustomTestsInfo, s
             })
             .on("error", function (error) {
                 console.log("E2E Tests failed");
-                console.log(chalk.red(error));
+                console.log(error);
                 server.stop();
                 process.exit(1);
             });

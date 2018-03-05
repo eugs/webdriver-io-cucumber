@@ -1,13 +1,13 @@
-const report = require('multiple-cucumber-html-reporter');
-const os = require('os');
-const platform = os.platform() === 'win32' ? 'windows' : os.platform();
+const report = require('multiple-cucumber-html-reporter'),
+    os = require('os'),
+    platform = os.platform() === 'win32' ? 'windows' : os.platform();
 
 class HTMLReporter {
 
-    constructor(customData){
+    constructor(customData) {
         this.customData = customData;
     }
-    generate(){
+    generate() {
         report.generate({
             jsonDir: this.customData.jsonPath,
             reportPath: this.customData.reportPath,

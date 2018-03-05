@@ -1,7 +1,8 @@
 "use strict";
-const xml2js = require('xml2js');
-const fs = require('fs');
-
+const xml2js = require('xml2js'),
+    fs = require('fs'),
+    path = require('path'),
+    chalk = require('chalk');
 class JunitReporter {
 
     /**
@@ -82,14 +83,13 @@ class JunitReporter {
 
     generateXMLReport(pathToJson, pathToXml) {
         const builder = new xml2js.Builder();
-        const pathToJsonReport = path.normalize(pathToJson + '/report.json');
-        const xml = builder.buildObject(this._build(require(pathToJsonReport)));
-        fs.writeFileSync(pathToXml + '/report.xml', xml);
+        const xml = builder.buildObject(this._build(require(path.join(pathToJson, 'report.json'))));
+        fs.writeFileSync(path.join(pathToXml, 'report.xml'), xml);
         console.log(chalk.blue(`\n 
 =====================================================================================
     XML report generated in:
     
-    ${pathToJsonReport}
+    ${path.join(pathToXml, 'report.xml')}
 =====================================================================================\n`));
     }
 }
