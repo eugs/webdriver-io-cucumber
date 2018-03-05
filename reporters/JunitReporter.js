@@ -3,11 +3,14 @@ const xml2js = require('xml2js'),
     fs = require('fs'),
     path = require('path'),
     chalk = require('chalk');
+
 class JunitReporter {
 
     /**
      * Build xml
+     * @param jsonData 
      * @return {{testsuites: (webdriver.promise.Promise|promise.Promise<any[]>|Array|wdpromise.Promise<any[]>|*|{İ, I, İ})}}
+     * @private
      */
     _build(jsonData) {
         return {
@@ -81,9 +84,16 @@ class JunitReporter {
         }
     }
 
+    /**
+     * Generate XML and write into the file 
+     * @param {string} pathToJson 
+     * @param {string} pathToXml 
+     */
     generateXMLReport(pathToJson, pathToXml) {
-        const builder = new xml2js.Builder();
-        const xml = builder.buildObject(this._build(require(path.join(pathToJson, 'report.json'))));
+        const xml = new xml2js.Builder().buildObject(this._build(require(path.join(pathToJson, 'report.json'))));
+        if (!fs.existsSync(pathToXml)) {
+            fs.mkdirSync(pathToXml);
+        }
         fs.writeFileSync(path.join(pathToXml, 'report.xml'), xml);
         console.log(chalk.blue(`\n 
 =====================================================================================
