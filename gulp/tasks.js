@@ -16,39 +16,23 @@ module.exports = function (gulp, creds, browsersConfig, pathToCustomTestsInfo, s
     gulp.task('test', ['c_server'], test);
 
     gulp.task('report', () => {
-        const report = require('multiple-cucumber-html-reporter');
-        const os = require('os');
-        let platform = os.platform() === 'win32' ? 'windows' : os.platform();
-        const customData = require(path.resolve(pathToCustomTestsInfo));
+        const customData = require(path.resolve(pathToCustomTestsInfo)),
+            JunitReporter = require('wd-cucumber').JunitReporter,
+            HTMLReporter = require('wd-cucumber').HTMLReporter;
+
         let browserName = args.browser ? args.browser : 'chrome';
-        let date = new Date();
-        let reportDate = date.getHours() + '.' + date.getMinutes() + 'time_' + date.getDate() + '_' + parseInt(date.getMonth() + 1) + '_' + date.getFullYear() + '_date';
         let jsonPath = customData.jsonPath ? customData.jsonPath : path.resolve('./reports/' + args.env + '/' + browserName + '/json');
-        let reportPath = customData.reportPath ? customData.reportPath : path.resolve('./reports/' + args.env + '/' + browserName + '/html/' + reportDate);
-        report.generate({
-            jsonDir: jsonPath,
-            reportPath: reportPath,
-            metadata: {
-                browser: {
-                    name: browserName,
-                    version: customData.browserVersion
-                },
-                device: customData.device,
-                platform: {
-                    name: platform,
-                    version: os.release()
-                }
-            },
-            customData: {
-                title: 'Run info',
-                data: [
-                    { label: 'Project', value: customData.project },
-                    { label: 'Release', value: customData.release },
-                    { label: 'Execution Start Time', value: customData.startTime },
-                    { label: 'Execution End Time', value: customData.endTime }
-                ]
-            }
-        });
+        let xmlPath = customData.xmlPath ? customData.xmlPath : path.resolve('./reports/' + args.env + '/' + browserName + '/xml');
+        let reportPath = customData.reportPath ? customData.reportPath : path.resolve('./reports/' + args.env + '/' + browserName + '/html/');
+        customData.browserName = browserName;
+        customData.jsonPath = jsonPath;
+        customData.reportPath = reportPath;
+
+        let html = new HTMLReporter(customData);
+        html.generate();
+
+        let junit = new JunitReporter();
+        junit.generateXMLReport(jsonPath, xmlPath);
     });
 
     function test() {
@@ -97,6 +81,7 @@ module.exports = function (gulp, creds, browsersConfig, pathToCustomTestsInfo, s
             })
             .on("error", function (error) {
                 console.log("E2E Tests failed");
+                console.log(chalk.red(error));
                 server.stop();
                 process.exit(1);
             });

@@ -10,4 +10,6 @@ exports.Memory = require('./framework/memory/Memory');
 exports.ConstantMap = require('./framework/memory/ConstantMap');
 exports.CredentialServer = require('./framework/credential_server/CredentialServer');
 exports.ServerCredentialManager = require('./framework/credential_manager/ServerCredentialManager');
+exports.JunitReport = require('./reporters/JunitReporter');
+exports.HTMLReporter = require('./reporters/HTMLReporter');
 exports.tasks = require('./gulp/tasks');
