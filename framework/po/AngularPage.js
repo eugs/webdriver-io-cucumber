@@ -26,10 +26,14 @@ class AngularPage extends Page {
     /**
      * Returns webdriverio element by the element name from the page object
      * @param {String} elementPath - element name or full path to element
+     * @param {String} withoutSync - flag (will not wait synchronization with Angular)
      */
-    getElement(elementPath) {
-        this.waitAngular();
+    getElement(elementPath, withoutSync) {
+        if (!withoutSync) {
+            this.waitAngular();
+        }
         return super.getElement(elementPath);
+
     }
 }
 module.exports = AngularPage;
