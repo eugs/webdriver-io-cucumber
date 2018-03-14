@@ -22,20 +22,49 @@ class Memory extends IMemory {
     }
 
     /**
-     * Get value by key
-     * @param key
-     * @return value by key
-     */
+    * Get value by key
+    * @param key
+    * @return value by key
+    */
     static getValue(key) {
-        if (MemoryPatterns.MEMORY.test(key)) {
-            return this._getMemoryValue(key.substr(1))
+        let keys,
+            value;
+        if (MemoryPatterns.FILE_CONSTANT.test(key)) {
+            keys = key.split(MemoryPatterns.FILE_CONSTANT);
+            value = this._getFileConstantValue(keys[1]);
+
+            return this.concatValues(keys, value);
+
         } else if (MemoryPatterns.CONSTANT.test(key)) {
-            return this._getConstantValue(key.substr(2))
-        } else if (MemoryPatterns.FILE_CONSTANT.test(key)) {
-            return this._getFileConstantValue(key.substr(3))
-        } else return key
+            keys = key.split(MemoryPatterns.CONSTANT);
+            value = this._getConstantValue(keys[1]);
+
+            return this.concatValues(keys, value);
+
+        } else if (MemoryPatterns.MEMORY.test(key)) {
+            keys = key.split(MemoryPatterns.MEMORY);
+            value = this._getMemoryValue(keys[1]);
+
+            return this.concatValues(keys, value);
+
+        } else {
+
+            return key
+        }
     }
 
+    /**
+     * Concat part key with saved value
+     * @param {Array} keys 
+     * @param {*} value
+     */
+    static concatValues(keys, value) {
+        if (keys[0]) {
+            return (keys[0] + value);
+        } else {
+            return value;
+        }
+    }
 
     /**
      * Set constant map
