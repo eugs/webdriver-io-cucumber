@@ -5,9 +5,9 @@
  */
 const MemoryPatterns = {
 
-    MEMORY: /^\$(?!\$)(.+)/,
-    CONSTANT: /^\$\$(?!\$)(.+)/,
-    FILE_CONSTANT: /^\$\$\$(?!\$)(.+)/
+    MEMORY: /\${1}/,
+    CONSTANT: /\${2}/,
+    FILE_CONSTANT: /\${3}/
 };
 
 module.exports = MemoryPatterns;
