@@ -1,6 +1,6 @@
 {
   "name": "wd-cucumber",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "Framework wrapper on webdriver.io + cucumber",
   "main": "index.js",
   "scripts": {
@@ -24,7 +24,7 @@
     "request": "^2.83.0",
     "request-promise-native": "^1.0.5",
     "wdio-cucumber-json-reporter": "^0.0.3",
-    "wdio-cucumber2fix-framework": "^0.0.2",
+    "wdio-cucumber2fix-framework": "^0.0.4",
     "wdio-cucumber-reporter": "0.0.2",
     "wdio-selenium-standalone-service": "0.0.9",
     "webdriverio": "^4.10.0",
