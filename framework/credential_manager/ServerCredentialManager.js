@@ -47,7 +47,7 @@ class ServerCredentialManager extends CredentialManager {
                     method: "PUT",
                     uri: "http://localhost:3099/credentials",
                     body: {
-                        username: credentials.username
+                        user: credentials.user
                     },
                     json: true
                 })

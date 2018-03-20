@@ -31,7 +31,7 @@ class CredentialServer {
 
         this.server.put("/credentials", (req, res) => {
             try {
-                this.db.freeCredentials(req.body.username);
+                this.db.freeCredentials(req.body.user);
                 res.sendStatus(200);
             } catch (e) {
                 res.status(500).send(e);
