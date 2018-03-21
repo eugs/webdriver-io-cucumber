@@ -12,7 +12,17 @@ module.exports = function (gulp, creds, browsersConfig, pathToCustomTestsInfo, s
         server.start(3099);
     });
 
-    gulp.task('test', ['c_server'], test);
+    gulp.task('selenium', () => {
+        selenium.start(function (err, child) {
+            if (err) {
+                console.log(err);
+                throw err;
+            }
+            console.log(`Selenium run with process PID${process.pid}`);
+        });
+    });
+
+    gulp.task('test', ['c_server', 'selenium'], test);
 
     gulp.task('report', () => {
         const customData = require(path.resolve(pathToCustomTestsInfo)),
