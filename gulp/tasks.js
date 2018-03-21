@@ -3,6 +3,7 @@ const creds = require('../tests/configs/creds'),
     wdio = require('gulp-webdriver'),
     path = require('path'),
     config = path.resolve('./wdio.conf.js'),
+    selenium = require('selenium-standalone'),
     CredentialServer = require("../framework/credential_server/CredentialServer");
 
 module.exports = function (gulp, creds, browsersConfig, pathToCustomTestsInfo, server = new CredentialServer()) {
@@ -13,12 +14,11 @@ module.exports = function (gulp, creds, browsersConfig, pathToCustomTestsInfo, s
     });
 
     gulp.task('selenium', () => {
-        selenium.start(function (err, child) {
+        selenium.start((err, child) => {
             if (err) {
                 console.log(err);
                 throw err;
             }
-            console.log(`Selenium run with process PID${process.pid}`);
         });
     });
 
