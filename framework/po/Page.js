@@ -92,7 +92,7 @@ class Page extends AbstractComponent {
      * @param {Number} orderNum 
      */
     _getElementsDependsOnCollection(parent, newElement, isCollection, orderNum) {
-        if (this._isParentACollection(parent)) {
+        if (Array.isArray(parent.element)) {
             return parent.element.map(el => {
                 if (isCollection) {
                     return this._getElementsIfCollection(el, newElement, orderNum)
@@ -109,14 +109,6 @@ class Page extends AbstractComponent {
                     : this._waitForElement($(newElement))
             }
         }
-    }
-
-    /**
-     * 
-     * @param {Object | Array} parent 
-     */
-    _isParentACollection(parent) {
-        return Array.isArray(parent.element);
     }
 
     /**
