@@ -1,9 +1,11 @@
 {
   "name": "wd-cucumber",
-  "version": "0.0.16",
+  "version": "1.0.0",
   "description": "Framework wrapper on webdriver.io + cucumber",
   "main": "index.js",
   "scripts": {
+    "start": "selenium-standalone start",
+    "postinstall": "selenium-standalone install",
     "test": "wdio wdio.conf.js"
   },
   "keywords": [
@@ -13,7 +15,7 @@
     "e2e"
   ],
   "author": "VShut",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "body-parser": "^1.18.2",
     "chai": "^4.1.2",
