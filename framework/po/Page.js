@@ -17,21 +17,15 @@ class Page extends AbstractComponent {
         /**
          * @type {{component: Page, element: null}}
          */
-        const chainLink = {
+        let currentChainLink = {
             component: this,
             element: null
         };
-
         const tokens = elementPath.split(' -> ').reverse();
-
-        let currentChainLink = chainLink;
-
         while (tokens.length > 0) {
             currentChainLink = this._elementDependsOnType(tokens.pop(), currentChainLink);
         }
-
         return currentChainLink.element;
-
     }
 
     /**
@@ -49,6 +43,12 @@ class Page extends AbstractComponent {
         }
     }
 
+    /**
+     * 
+     * @param {Object} element 
+     * @returns {Object}
+     * @private
+     */
     _waitForElement(element) {
         browser.waitUntil(() => { return element; }, WAIT_FOR_ELEMENT);
         return element;
@@ -56,9 +56,9 @@ class Page extends AbstractComponent {
 
     /**
      *
-     * @param name
-     * @param chainLink {{component: Page, element: null}}
-     * @return {*}
+     * @param {String} name
+     * @param {Object} chainLink {{component: Page, element: null}}
+     * @return {Object}
      * @private
      */
     _elementDependsOnType(name, chainLink) {
@@ -67,39 +67,66 @@ class Page extends AbstractComponent {
 
         if (chainLink.component.components.has(elementName.name)) {
             const component = chainLink.component.components.get(elementName.name);
+            newChainLink.component = component;
 
             if (component instanceof Component) {
-                newChainLink.component = component;
-
-                chainLink.element
-                    ? newChainLink.element = this._waitForElement(chainLink.element.$(component.locator))
-                    : newChainLink.element = this._waitForElement($(component.locator));
+                newChainLink.element = this._getElementsDependsOnCollection(chainLink, newChainLink.component.locator);
 
             } else if (component instanceof Collection) {
-                newChainLink.component = component;
-
-                if (elementName.orderNum !== undefined) {
-                    chainLink.element
-                        ? newChainLink.element = this._waitForElement(chainLink.element.$$(component.locator)[elementName.orderNum])
-                        : newChainLink.element = this._waitForElement($$(component.locator)[elementName.orderNum]);
-                } else {
-                    chainLink.element
-                        ? newChainLink.element = this._waitForElement(chainLink.element.$$(component.locator))
-                        : newChainLink.element = this._waitForElement($$(component.locator));
-                }
+                newChainLink.element = this._getElementsDependsOnCollection(chainLink, newChainLink.component.locator, true, elementName.orderNum);
 
             } else if (typeof component === 'string') {
-                newChainLink.component = null;
-
-                chainLink.element
-                    ? newChainLink.element = this._waitForElement(chainLink.element.$(component))
-                    : newChainLink.element = this._waitForElement($(component));
+                newChainLink.element = this._getElementsDependsOnCollection(chainLink, newChainLink.component);
             }
+            return newChainLink;
         } else {
             throw new Error(`Element '${elementName.name}' isn't defined on the page!`);
         }
+    }
 
-        return newChainLink
+    /**
+     * 
+     * @param {Object} parent 
+     * @param {Object} newElement 
+     * @param {Boolean} isCollection 
+     * @param {Number} orderNum 
+     */
+    _getElementsDependsOnCollection(parent, newElement, isCollection, orderNum) {
+        if (Array.isArray(parent.element)) {
+            return parent.element.map(el => {
+                if (isCollection) {
+                    return this._getElementsIfCollection(el, newElement, orderNum)
+                } else {
+                    return this._waitForElement(el.$(newElement));
+                }
+            })
+        } else {
+            if (isCollection) {
+                return this._waitForElement(this._getElementsIfCollection(parent.element, newElement, orderNum))
+            } else {
+                return parent.element
+                    ? this._waitForElement(parent.element.$(newElement))
+                    : this._waitForElement($(newElement))
+            }
+        }
+    }
+
+    /**
+     * 
+     * @param {Object} parent 
+     * @param {Object} newElement 
+     * @param {Number} orderNum 
+     */
+    _getElementsIfCollection(parent, newElement, orderNum) {
+        if (orderNum != undefined && parent) {
+            return parent.$$(newElement)[orderNum];
+        } else if (orderNum != undefined) {
+            return $$(newElement)[orderNum];
+        } else if (parent) {
+            return parent.$$(newElement);
+        } else {
+            return $$(newElement);
+        }
     }
 
     /**
