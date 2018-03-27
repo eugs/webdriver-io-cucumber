@@ -1,6 +1,6 @@
 {
   "name": "wd-cucumber",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Framework wrapper on webdriver.io + cucumber",
   "main": "index.js",
   "scripts": {
