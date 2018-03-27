@@ -4,6 +4,7 @@ const creds = require('../tests/configs/creds'),
     path = require('path'),
     config = path.resolve('./wdio.conf.js'),
     selenium = require('selenium-standalone'),
+    TaskKiller = require("../framework/taskkiller/TaskKiller"),
     CredentialServer = require("../framework/credential_server/CredentialServer");
 
 module.exports = function (gulp, creds, browsersConfig, pathToCustomTestsInfo, server = new CredentialServer()) {
@@ -40,6 +41,8 @@ module.exports = function (gulp, creds, browsersConfig, pathToCustomTestsInfo, s
         new HTMLReporter(customData).generate();
         new JunitReporter().generateXMLReport(jsonPath, xmlPath);
     });
+
+    gulp.task("kill", () => TasksKiller.kill(["chromedriver", "iedriverserver"]));
 
     function test() {
         let baseUrl = args.url
