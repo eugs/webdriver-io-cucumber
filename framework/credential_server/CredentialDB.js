@@ -34,7 +34,7 @@ class CredentialDB {
 
     /**
      * Free credentials by username
-     * @param username
+     * @param username - username to delete
      */
     freeCredentials(username) {
         const userIndex = this.credentials.findIndex(item => item.username === username);
