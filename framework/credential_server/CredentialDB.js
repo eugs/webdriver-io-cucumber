@@ -33,16 +33,16 @@ class CredentialDB {
     }
 
     /**
-     * Free credentials by user
-     * @param user
+     * Free credentials by username
+     * @param username - username to delete
      */
-    freeCredentials(user) {
-        const userIndex = this.credentials.findIndex(item => item.user === user);
+    freeCredentials(username) {
+        const userIndex = this.credentials.findIndex(item => item.username === username);
 
         if (userIndex !== -1) {
             this.credentials[userIndex].isLocked = false;
         } else {
-            throw new Error(`Username ${user} isn't found`)
+            throw new Error(`Username ${username} isn't found`)
         }
     }
 
