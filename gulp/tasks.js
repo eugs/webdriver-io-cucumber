@@ -10,7 +10,7 @@ module.exports = function (gulp, creds, browsersConfig, pathToCustomTestsInfo) {
     const args = require('./help').args.help().argv;
 
     gulp.task('selenium', () => {
-        selenium.start((err, child) => {
+        selenium.start((err) => {
             if (err) throw err
         });
     });
@@ -83,7 +83,8 @@ module.exports = function (gulp, creds, browsersConfig, pathToCustomTestsInfo) {
                 console.log("E2E Testing complete");
                 process.exit();
             })
-            .on("error", function () {
+            .on("error", function (err) {
+                console.log(err);
                 process.exit(1);
             });
     }

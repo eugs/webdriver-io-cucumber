@@ -26,9 +26,7 @@ async function createUserPool(serverURI, env, credentials, sessionId) {
         json: true
     }
     try {
-        console.log(options);
         const res = await request(options);
-        console.log(res.users);
     } catch (e) {
         console.log(e.statusCode);
         console.log(e.message);
@@ -67,7 +65,6 @@ async function lockUser(serverURI, env) {
     }
     try {
         const res = await request(options);
-        console.log(res);
         return res;
     } catch (e) {
         console.log(e.statusCode);
@@ -88,7 +85,6 @@ async function unlockUser(serverURI, env, userName) {
     }
     try {
         const res = await request(options);
-        console.log(res);
     } catch (e) {
         console.log(e.statusCode);
         console.log(e.message);
