@@ -10,7 +10,9 @@ module.exports = function (gulp, creds, browsersConfig, pathToCustomTestsInfo) {
     const args = require('./help').args.help().argv;
 
     gulp.task('selenium', () => {
-        selenium.start((err, child) => { if (err) throw err });
+        selenium.start((err, child) => {
+            if (err) throw err
+        });
     });
 
     gulp.task('test', ['selenium'], test);
