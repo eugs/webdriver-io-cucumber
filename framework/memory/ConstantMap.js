@@ -2,13 +2,9 @@
 const fs = require("fs");
 const path = require("path");
 
-/**
- * @implements IConstantMap
- */
-class ConstantMap extends IConstantMap {
+class ConstantMap {
 
     constructor() {
-        super();
         this.constants = new Map();
         this.fileConstants = new Map();
     }

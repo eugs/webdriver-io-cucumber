@@ -79,11 +79,9 @@ module.exports = function (gulp, creds, browsersConfig, pathToCustomTestsInfo) {
             }))
             .on("end", function () {
                 console.log("E2E Testing complete");
-                server.stop();
                 process.exit();
             })
-            .on("error", function (error) {
-                server.stop();
+            .on("error", function () {
                 process.exit(1);
             });
     }
