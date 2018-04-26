@@ -34,17 +34,6 @@ Create html report
     gulp report -e prd
 ```
 
-Create users pool for multiple instances in wdio.conf.js
-```
-const credentialManager = require('wd-cucumber').ServerCredentialManager;
-    onPrepare() {
-        if (this.user) {
-            credentialManager.createPool([{ user: this.user, password: this.password }]);
-        } else {
-            credentialManager.createPool(creds[process.env.ENV].creds);
-        }
-    }
-```
 If you need to test Angular app, add 'rootElement' into wdio.conf.js:
 ```
     rootElement: '<your_angular_root_element>'
@@ -62,4 +51,15 @@ class Home extends AngularPage {
     }
 }
 ```
+
+Run tests in parallel with different credentials:
+1. Start credential server (server example [here](https://github.com/VolhaShut/Credential-Service))
+2. Add credental manager functions in tests
+    * Get sessionId from `createSessionId(<your_host:port>)`
+    * Create user pool `createUserPool(<your_host:port>, <your_env>, [{user: <user>, password: <password>}], sessionId)`- before tests start (for example in wdio.config -> `onPrepare()`). Be aware, these functions are async!
+    * Use `lockUser()`/`unlockUser()` for get and free user credential. For example:
+
+                `browser.call(async () => credentials = await mg.lockUser('http://localhost:3002', <your_env_name>));`
+    * Delete user pool from server, after tests were done: `deleteUserPool(<your_host:port>, <your_env>, sessionId)`
+
 

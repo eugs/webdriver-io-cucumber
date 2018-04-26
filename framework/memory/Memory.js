@@ -1,15 +1,7 @@
 "use strict";
-/**
- * @interface
- * @type {IMemory}
- */
-const IMemory = require("./IMemory");
 const MemoryPatterns = require("./MemoryPatterns");
 
-/**
- * @implements IMemory
- */
-class Memory extends IMemory {
+class Memory {
 
     /**
      * Set value by key

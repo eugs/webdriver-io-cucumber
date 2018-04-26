@@ -1,10 +1,4 @@
 "use strict";
-
-/**
- * @interface
- * @type {IConstantMap}
- */
-const IConstantMap = require("./IConstantMap");
 const fs = require("fs");
 const path = require("path");
 

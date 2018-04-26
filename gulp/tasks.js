@@ -4,45 +4,39 @@ const creds = require('../tests/configs/creds'),
     path = require('path'),
     config = path.resolve('./wdio.conf.js'),
     selenium = require('selenium-standalone'),
-    TaskKiller = require("../framework/taskkiller/TaskKiller"),
-    CredentialServer = require("../framework/credential_server/CredentialServer");
+    taskKiller = require("../framework/taskKiller");
 
-module.exports = function (gulp, creds, browsersConfig, pathToCustomTestsInfo, server = new CredentialServer()) {
+module.exports = function (gulp, creds, browsersConfig, pathToCustomTestsInfo) {
     const args = require('./help').args.help().argv;
 
-    gulp.task('c_server', () => {
-        server.start(3099);
-    });
-
     gulp.task('selenium', () => {
-        selenium.start((err, child) => {
-            if (err) {
-                console.log(err);
-                throw err;
-            }
-        });
+        selenium.start((err, child) => { if (err) throw err });
     });
 
-    gulp.task('test', ['c_server', 'selenium'], test);
+    gulp.task('test', ['selenium'], test);
 
     gulp.task('report', () => {
         const customData = require(path.resolve(pathToCustomTestsInfo)),
             JunitReporter = require('wd-cucumber').JunitReporter,
             HTMLReporter = require('wd-cucumber').HTMLReporter;
 
-        let browserName = args.browser ? args.browser : 'chrome';
-        let jsonPath = customData.jsonPath ? customData.jsonPath : path.resolve('./reports/' + args.env + '/' + browserName + '/json');
-        let xmlPath = customData.xmlPath ? customData.xmlPath : path.resolve('./reports/' + args.env + '/' + browserName + '/xml');
-        let reportPath = customData.reportPath ? customData.reportPath : path.resolve('./reports/' + args.env + '/' + browserName + '/html/');
+        const browserName = args.browser ? args.browser : 'chrome';
+        if (!customData.jsonPath) {
+            customData.jsonPath = path.resolve('./reports/' + args.env + '/' + browserName + '/json');
+        }
+        if (!customData.xmlPath) {
+            customData.xmlPath = path.resolve('./reports/' + args.env + '/' + browserName + '/xml');
+        }
+        if (!customData.reportPath) {
+            customData.reportPath = path.resolve('./reports/' + args.env + '/' + browserName + '/html/');
+        }
         customData.browserName = browserName;
-        customData.jsonPath = jsonPath;
-        customData.reportPath = reportPath;
 
         new HTMLReporter(customData).generate();
-        new JunitReporter().generateXMLReport(jsonPath, xmlPath);
+        new JunitReporter().generateXMLReport(customData.jsonPath, customData.xmlPath);
     });
 
-    gulp.task("kill", () => TasksKiller.kill(["chromedriver", "iedriverserver"]));
+    gulp.task("kill", () => taskKiller.kill(["chromedriver", "iedriverserver"]));
 
     function test() {
         let baseUrl = args.url
@@ -89,8 +83,6 @@ module.exports = function (gulp, creds, browsersConfig, pathToCustomTestsInfo, s
                 process.exit();
             })
             .on("error", function (error) {
-                console.log("E2E Tests failed");
-                console.log(error);
                 server.stop();
                 process.exit(1);
             });
