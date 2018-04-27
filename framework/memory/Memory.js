@@ -3,22 +3,30 @@ const MemoryPatterns = require("./MemoryPatterns");
 
 class Memory {
 
+    constructor() {
+        if (!this.memory) {
+            this.memory = new Map();
+        }
+    }
     /**
      * Set value by key
      * @param key
      * @param value
      */
-    static setValue(key, value) {
-        this._initMemory();
+    setValue(key, value) {
+        // this._initMemory();
         this.memory.set(key, value);
     }
 
+    getMemory() {
+        return this.memory;
+    }
     /**
     * Get value by key
     * @param key
     * @return value by key
     */
-    static getValue(key) {
+    getValue(key) {
         let keys,
             value;
         if (MemoryPatterns.FILE_CONSTANT.test(key)) {
@@ -50,7 +58,7 @@ class Memory {
      * @param {Array} keys 
      * @param {*} value
      */
-    static concatValues(keys, value) {
+    concatValues(keys, value) {
         if (keys[0]) {
             return (keys[0] + value);
         } else {
@@ -62,18 +70,8 @@ class Memory {
      * Set constant map
      * @param map {ConstantMap}
      */
-    static setConstantMap(map) {
+    setConstantMap(map) {
         this.constantMap = new map();
-    }
-
-    /**
-     * Init memory
-     * @private
-     */
-    static _initMemory() {
-        if (!this.memory) {
-            this.memory = new Map();
-        }
     }
 
     /**
@@ -82,7 +80,7 @@ class Memory {
      * @param key
      * @return value by key
      */
-    static _getMemoryValue(key) {
+    _getMemoryValue(key) {
         if (this.memory.has(key)) {
             return this.memory.get(key)
         } else {
@@ -96,7 +94,7 @@ class Memory {
      * @param key
      * @return value by key
      */
-    static _getConstantValue(key) {
+    _getConstantValue(key) {
         return this.constantMap.getConstant(key)
     }
 
@@ -106,10 +104,10 @@ class Memory {
      * @param key
      * @return value by key
      */
-    static _getFileConstantValue(key) {
+    _getFileConstantValue(key) {
         return this.constantMap.getFileConstant(key)
     }
 
 }
 
-module.exports = Memory;
+exports.memory = new Memory();
