@@ -84,7 +84,7 @@ class Memory {
         if (this.memory.has(key)) {
             return this.memory.get(key)
         } else {
-            throw new Error(`Memory ${key} does not exist`)
+            throw new ReferenceError(`Memory ${key} does not exist`)
         }
     }
 
