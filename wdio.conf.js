@@ -2,9 +2,8 @@ const path = require('path');
 
 exports.config = {
     specs: [
-        path.resolve('./tests/e2e/features/**/*')
+        './tests/e2e/features/**'
     ],
-    services: ['selenium-standalone'],
     seleniumLogs: './logs',
     sync: true,
     logLevel: 'silent',
@@ -17,12 +16,6 @@ exports.config = {
     framework: 'cucumber2fix',
     reporters: ['dot', 'cucumber', 'cucumber-json'],
     reporterOptions: {
-        junit: {
-            outputDir: './reports/' + process.env.ENV + '/' + process.env.BROWSER + '/xml'
-        },
-        json: {
-            outputDir: './reports/' + process.env.ENV + '/' + process.env.BROWSER + '/wdio-json'
-        },
         'cucumber-json': {
             outputDir: './reports/' + process.env.ENV + '/' + process.env.BROWSER + '/json'
         }
