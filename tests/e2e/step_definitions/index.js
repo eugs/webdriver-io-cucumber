@@ -12,8 +12,11 @@ defineSupportCode(({ Given, When, Then, And, setDefaultTimeout }) => {
         element.click();
     });
     Then(/^I should be on "(.*)" page$/, (page) => {
-        expect(browser.getUrl()).to.eql(browser.options.baseUrl + state.getPageByName(page).pageUrl);
+        browser.waitUntil(() =>{
+            return browser.getUrl().search(state.getPageByName(page).pageUrl) !== -1
+        });
     });
+
     Then(/^I wait "(.*)" second\(s\)$/, (time) => {
         browser.pause(time * 1000);
     });
@@ -33,7 +36,9 @@ defineSupportCode(({ Given, When, Then, And, setDefaultTimeout }) => {
     });
 
     Then(/^I wait element "(.*)" visibility for "(.*)" seconds$/, (element, timeout) => {
-        state.getPage().getElement(element).waitForVisible(timeout * 1000);
+        browser.waitUntil(() => {
+            return state.getPage().getElement(element)
+        }, timeout*1000)
     });
 
     Then(/^I'm looking for "(.*)" value of "(.*)" elements and click it$/, (value, element) => {
@@ -42,12 +47,12 @@ defineSupportCode(({ Given, When, Then, And, setDefaultTimeout }) => {
         separatedCollection[0].click();
     });
 
-    Then(/^console log "(.*)" element$/, (element) => {
+    Then(/^Check sorted "(.*)" element values$/, (element) => {
         element = state.getPage().getElement(element);
-        let versions = element.map((el) => {
+        const elementText = element.map((el) => {
             return el.getText();
         });
-        let sortedVersions = versions.slice().sort().reverse();
-        expect(versions.toString()).to.equal(sortedVersions.toString());
+        const sortedElementText = elementText.slice().sort().reverse();
+        expect(elementText.toString()).to.equal(sortedElementText.toString());
     });
 });
