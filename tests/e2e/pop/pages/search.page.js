@@ -1,13 +1,14 @@
 const path = require('path');
 const Page = require(path.resolve('./framework/po/Page'));
 const Menu = require('../components/menu');
+const Package = require('../components/package');
 
-class Features extends Page {
-    constructor(selector = '.screen-fill-body', url = '/features'){
+class Search extends Page {
+    constructor(selector = 'body', url = '/search'){
         super(selector,url);
         this.defineComponent('Menu', new Menu());
-        this.defineElement('Title', 'title');
+        this.defineCollection('Package', new Package());
     }
 }
 
-module.exports = Features;
+module.exports = Search;

@@ -6,7 +6,8 @@
   "scripts": {
     "start": "selenium-standalone start",
     "postinstall": "selenium-standalone install",
-    "test": "wdio wdio.conf.js"
+    "test": "wdio wdio.conf.js",
+    "update": "selenium-standalone install --drivers.chrome.version=2.37"
   },
   "keywords": [
     "webdriver.io",

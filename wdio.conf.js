@@ -21,11 +21,14 @@ exports.config = {
         }
     },
     cucumberOpts: {
-        require: ['./tests/e2e/step_definitions'],
+        require: ['./tests/e2e/step_definitions/index.js',
+            './tests/e2e/step_definitions/hooks.js'
+        ],
         strict: true,
         colors: true,
         tags: [],
         timeout: 20000,
         ignoreUndefinedDefinitions: false,
     },
+    memory: require('./framework/memory/Memory').memory
 };
