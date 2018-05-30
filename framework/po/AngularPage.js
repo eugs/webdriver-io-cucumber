@@ -11,7 +11,7 @@ class AngularPage extends Page {
     waitAngular() {
         let rootElement = browser.options.rootElement;
         browser.waitUntil(() => {
-            return browser.execute((rootElement) => {
+            return browser.execute(function(rootElement){
                 if (window.angular == undefined) {
                     return true;
                 } else {

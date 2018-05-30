@@ -1,9 +1,11 @@
 
 const creds = {
-    "prd":{
+    "prd": {
         "url": "https://www.npmjs.com",
-        "user": "",
-        "password":""
+        "creds": [
+            {"user": "",
+            "password": ""}
+        ]
     }
 }
 
